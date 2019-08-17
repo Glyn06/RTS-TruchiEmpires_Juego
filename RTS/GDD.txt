@@ -1,0 +1,11 @@
+EPersonaje:
+OBRERO
+-Maquina de estados x Eventos
+-Estados: 
+Ir a minar
+Minando
+Llevar oro
+Depositar oro
+Idle
+cancelar accion
+

@@ -9,3 +9,5 @@ Depositar oro
 Idle
 cancelar accion
 
+BUSCAR
+- decal de seleccion de unidad.

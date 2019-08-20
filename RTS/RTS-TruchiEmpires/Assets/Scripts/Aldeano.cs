@@ -58,6 +58,7 @@ public class Aldeano : MonoBehaviour
         fsmMinero.SetRelations((int)EstadosMinero.LLevarOro, (int)EstadosMinero.DepositarOro, (int)EventosMinero.CollisionHouse);
         fsmMinero.SetRelations((int)EstadosMinero.LLevarOro, (int)EstadosMinero.CancelarAccion, (int)EventosMinero.Stop);
         fsmMinero.SetRelations((int)EstadosMinero.DepositarOro, (int)EstadosMinero.Idle, (int)EventosMinero.Stop);
+        fsmMinero.SetRelations((int)EstadosMinero.DepositarOro, (int)EstadosMinero.IrAMinar, (int)EventosMinero.ClickInMine);
         fsmMinero.SetRelations((int)EstadosMinero.CancelarAccion, (int)EstadosMinero.Idle, (int)EventosMinero.Stop);
     }
 

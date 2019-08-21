@@ -30,7 +30,7 @@ public class ObjectClicked : MonoBehaviour
         {
             if (seleccion1.tag == "Aldeano" && seleccion2.tag == "Mineral")
             {
-                seleccion1.GetComponent<Aldeano>().SetObjetivoTrabajo(seleccion2.transform);
+                seleccion1.GetComponent<Aldeano>().SetObjetivoTrabajo(seleccion2);
                 seleccion1.GetComponent<Aldeano>().trabajo = "Minar";
             }
         }

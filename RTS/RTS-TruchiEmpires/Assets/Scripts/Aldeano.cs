@@ -15,7 +15,7 @@ public class Aldeano : MonoBehaviour
     private bool ExplotandoRecurso;
     private List<GameObject> Depositos;
     //Esta variable contendra la posicion donde se encuentra el trabajo a realizar(la posicion de la casa a construir o la mina la cual minar, etc).
-    private Transform objetivoTrabajo;
+    private GameObject objetivoTrabajo;
     private Transform posicionActual;
     private Transform depositoMasCercano;
     private GameManager gm;
@@ -93,7 +93,7 @@ public class Aldeano : MonoBehaviour
                 break;
         }
     }
-    public void SetObjetivoTrabajo(Transform _objetivoTrabajo)
+    public void SetObjetivoTrabajo(GameObject _objetivoTrabajo)
     {
         objetivoTrabajo = _objetivoTrabajo;
     }
@@ -114,9 +114,9 @@ public class Aldeano : MonoBehaviour
         }
     }
     public void IrAMinar() {
-        if (objetivoTrabajo != null)
+        if (objetivoTrabajo.gameObject.activeSelf)
         {
-            transform.LookAt(new Vector3(objetivoTrabajo.position.x,transform.position.y, objetivoTrabajo.position.z));
+            transform.LookAt(new Vector3(objetivoTrabajo.transform.position.x,transform.position.y, objetivoTrabajo.transform.position.z));
             transform.position = transform.position + transform.forward * speed;
         }
         else {
@@ -125,7 +125,7 @@ public class Aldeano : MonoBehaviour
     }
     public void Minar() {
         //SE EJECUTA LA ANIMACION DE MINAR
-        if (ExplotandoRecurso)
+        if (objetivoTrabajo.gameObject.activeSelf)
         {
             cantOro = cantOro + Time.deltaTime;
             Debug.Log("cantOro: " + (int)cantOro);
@@ -134,6 +134,11 @@ public class Aldeano : MonoBehaviour
             Debug.Log("FULL CAPASITY");
             fsmMinero.SendEvent((int)EventosMinero.FullCapasity);
         }
+        if (!objetivoTrabajo.gameObject.activeSelf)
+        {
+            fsmMinero.SendEvent((int)EventosMinero.FullCapasity);
+        }
+        
     }
     public void LLevarOro() {
         //DEBERIA FIJARSE CUAL ES EL ALMACEN DE ORO O CENTRO URBANO MAS CERCANO
@@ -174,7 +179,7 @@ public class Aldeano : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         //Debug.Log("COLISIONE");
-        Debug.Log("TRIGGEREO CON " + other.gameObject.tag);
+        //Debug.Log("TRIGGEREO CON " + other.gameObject.tag);
         if (trabajo == "Minar" && other.gameObject.tag == "Mineral" && cantOro < capacity)
         {
             ExplotandoRecurso = true;
@@ -193,7 +198,7 @@ public class Aldeano : MonoBehaviour
     {
         if (trabajo == "Minar" && other.gameObject.tag == "Centro Urbano" && cantOro > 0)
         {
-            Debug.Log("ENTRE");
+            //Debug.Log("ENTRE");
             fsmMinero.SendEvent((int)EventosMinero.CollisionHouse);
         }
     }
@@ -201,6 +206,7 @@ public class Aldeano : MonoBehaviour
     {
         if (trabajo == "Minar" && other.gameObject.tag == "Mineral")
         {
+            Debug.Log("ENTRE");
             ExplotandoRecurso = false;
         }
     }

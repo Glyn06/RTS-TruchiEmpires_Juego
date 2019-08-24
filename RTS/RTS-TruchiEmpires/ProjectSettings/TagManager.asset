@@ -8,6 +8,8 @@ TagManager:
   - Aldeano
   - Mineral
   - Deposito Minero
+  - Piso
+  - Obstaculo
   layers:
   - Default
   - TransparentFX

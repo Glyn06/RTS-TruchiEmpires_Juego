@@ -79,7 +79,6 @@ public class Aldeano : MonoBehaviour
                 IrAMinar();
                 break;
             case (int)EstadosMinero.Minando:
-
                 Minar();
                 break;
             case (int)EstadosMinero.LLevarOro:

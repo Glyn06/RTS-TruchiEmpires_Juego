@@ -6,65 +6,131 @@ public class GeneradorDeNodos : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    public float ancho;
-    public float largo;
+    public int ancho = 1;
+    public int largo = 1;
     public GameObject cursor;
     //public float range;
     private Nodo nodoCrear;
     private Vector3 vector;
-    private List<Nodo> listaNodos;
+    private List<List<Nodo>> listaNodos;
     private Vector3 OriginalPosition;
+    RaycastHit hit;
     void Start()
     {
+        ancho = ancho + 1;
+        largo = largo + 1;
         OriginalPosition = transform.position;
-        listaNodos = new List<Nodo>();
+        listaNodos = new List<List<Nodo>>();
+        
+        for (int i = 0; i < ancho; i++)
+        {
+            listaNodos.Add(new List<Nodo>());
+        }
+        for (int i = 0; i < ancho; i++)
+        {
+            for (int j = 0; j < largo; j++)
+            {
+                listaNodos[i].Add(null);
+            }
+        }
         GenerarMapaDeNodos();
+        SeteadorDeAdyasentes();
     }
 
     // Update is called once per frame
-    void Update()
+    private void GenerarMapaDeNodos()
     {
-        
-    }
-    public void GenerarMapaDeNodos()
-    {
-        for (int i = 0; i <= ancho; i++)
+        for (int i = 0; i < ancho; i++)
         {
-            for (int j = 0; j <= largo; j++)
+            for (int j = 0; j < largo; j++)
             {
-                RaycastHit hit;
+                
                 if (Physics.Raycast(cursor.transform.position, cursor.transform.TransformDirection(Vector3.down), out hit, Mathf.Infinity))
                 {
-                    if (hit.collider.tag == "Piso")
+                    switch (hit.collider.tag)
                     {
-                        if (hit.collider.transform.position != null)
-                        {
-                            nodoCrear = new Nodo(hit.point+ new Vector3(0,1,0), Nodo.EstadoNodo.Nada,false); 
-                            listaNodos.Add(nodoCrear);
-                        }
-                        
+                        case "Piso":
+                            if (hit.collider.transform.position != null)
+                            {
+                                nodoCrear = new Nodo(hit.point + new Vector3(0, 1, 0), Nodo.EstadoNodo.Abierto, false);
+                                listaNodos[i][j] = nodoCrear;
+                            }
+                            break;
+                        case "Mineral":
+                            if (hit.collider.transform.position != null)
+                            {
+                                nodoCrear = new Nodo(hit.point + new Vector3(0, 1, 0), Nodo.EstadoNodo.Cerrado, true);
+                                listaNodos[i][j] = nodoCrear;
+                                Debug.Log("ENTRE");
+                            }
+                            break;
                     }
-                    /*else
-                    {
-                        if (hit.collider.transform.position != null)
-                        {
-                            nodoCrear = new Nodo(hit.point, Nodo.EstadoNodo.Cerrado, true); /*+ new Vector3(0,1,0));
-                            listaNodos.Add(nodoCrear);
-                        }
-                    }*/
+                    
+                    //Debug.Log()
                 }
                 transform.position = OriginalPosition + new Vector3(i, 0, j);
-                //Debug.Log()
+            }
+            //Debug.Log(listaNodos.Count);
+        }
+    }
+    private void SeteadorDeAdyasentes()
+    {
+        for (int i = 0; i < ancho; i++)
+        {
+            for (int j = 0; j < largo; j++)
+            {
+                if (listaNodos[i][j] != null)
+                {
+                    //Lados
+                    if ((i + 1 < ancho && i + 1 < largo) && listaNodos[i + 1][j] != null)
+                    {
+                        listaNodos[i][j].AddAdyNodo(listaNodos[i + 1][j]);
+                    }
+                    if ((j + 1 < ancho && j + 1 < largo) && listaNodos[i][j + 1] != null)
+                    {
+                        listaNodos[i][j].AddAdyNodo(listaNodos[i][j + 1]);
+                    }
+                    if (i - 1 >= 0 && listaNodos[i - 1][j] != null)
+                    {
+                        listaNodos[i][j].AddAdyNodo(listaNodos[i - 1][j]);
+                    }
+                    if (j - 1 >= 0 && listaNodos[i][j - 1] != null)
+                    {
+                        listaNodos[i][j].AddAdyNodo(listaNodos[i][j - 1]);
+                    }
+
+                    //Diagonales
+                    if ((i + 1 < ancho && i + 1 < largo) && (j + 1 < ancho && j + 1 < largo) && listaNodos[i + 1][j + 1] != null)
+                    {
+                        listaNodos[i][j].AddAdyNodo(listaNodos[i + 1][j + 1]);
+                    }
+                    if ((i + 1 < ancho && i + 1 < largo) && j - 1 >= 0 && listaNodos[i + 1][j - 1] != null)
+                    {
+                        listaNodos[i][j].AddAdyNodo(listaNodos[i + 1][j - 1]);
+                    }
+                    if (i - 1 >= 0 && (j + 1 < ancho && j + 1 < largo) && listaNodos[i - 1][j + 1] != null)
+                    {
+                        listaNodos[i][j].AddAdyNodo(listaNodos[i - 1][j + 1]);
+                    }
+                    if (i - 1 >= 0 && j - 1 >= 0 && listaNodos[i - 1][j - 1] != null)
+                    {
+                        listaNodos[i][j].AddAdyNodo(listaNodos[i - 1][j - 1]);
+                    }
+                }
             }
         }
-        Debug.Log(listaNodos.Count);
     }
-
     private void OnDrawGizmos()
     {
-        foreach(Nodo n in listaNodos)
+        for (int i = 0; i < ancho; i++)
         {
-            Gizmos.DrawCube(n.GetPosition(), new Vector3(0.1f, 0.1f, 0.1f));
+            for (int j = 0; j < largo; j++)
+            {
+                if (listaNodos[i][j] != null)
+                {
+                    Gizmos.DrawCube(listaNodos[i][j].GetPosition(), new Vector3(0.1f, 0.1f, 0.1f));
+                }
+            }
         }
     }
 }

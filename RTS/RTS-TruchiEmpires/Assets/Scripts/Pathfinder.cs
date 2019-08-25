@@ -2,10 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GeneradorDeNodos : MonoBehaviour
+public class Pathfinder : MonoBehaviour
 {
-    // Start is called before the first frame update
-
+    
+    public enum TypePathFinder
+    {
+        BreadhFirst,
+        DepthFirst,
+        Count,
+    }
+    public TypePathFinder TipoPath;
     public int ancho = 1;
     public int largo = 1;
     public GameObject cursor;
@@ -61,9 +67,10 @@ public class GeneradorDeNodos : MonoBehaviour
                             {
                                 nodoCrear = new Nodo(hit.point + new Vector3(0, 1, 0), Nodo.EstadoNodo.Cerrado, true);
                                 listaNodos[i][j] = nodoCrear;
-                                Debug.Log("ENTRE");
+ 
                             }
                             break;
+                            //AGREGAR MAS CASE SI HAY MAS TAGS DE OBJETOS TEMPORALES EN EL MAPA COMO POR EJEMPLO UNA CONSTRUCCION.
                     }
                     
                     //Debug.Log()
@@ -120,7 +127,16 @@ public class GeneradorDeNodos : MonoBehaviour
             }
         }
     }
-    private void OnDrawGizmos()
+    public List<Nodo> GetPath(Nodo origen,Nodo destino)
+    {
+        return null;
+    }
+    public void OpenNode(Nodo nodo)
+    {
+
+    }
+    
+    /*private void OnDrawGizmos()
     {
         for (int i = 0; i < ancho; i++)
         {
@@ -132,5 +148,5 @@ public class GeneradorDeNodos : MonoBehaviour
                 }
             }
         }
-    }
+    }*/
 }

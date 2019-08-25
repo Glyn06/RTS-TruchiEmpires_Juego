@@ -22,7 +22,9 @@ public class Nodo
         Debug.Log("posicion:" + posicion);
         _estado = estado;
         this.posicion = new Vector3(posicion.x, posicion.y, posicion.z);
+        Adjacents = new List<Nodo>();
     }
+    public Nodo(){}
 
     public Vector3 GetPosition()
     {
@@ -34,5 +36,21 @@ public class Nodo
         {
             Adjacents.Add(nodo);
         }
+    }
+    public void SetObstacle(bool _obstacle)
+    {
+        obstacle = _obstacle;
+    }
+    public void SetEstado(EstadoNodo estadoNodo)
+    {
+        _estado = estadoNodo;
+    }
+    public bool GetObstacle()
+    {
+        return obstacle;
+    }
+    public EstadoNodo GetEstado()
+    {
+        return _estado;
     }
 }

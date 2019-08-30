@@ -19,6 +19,9 @@ public class Aldeano : MonoBehaviour
     private Transform posicionActual;
     private Transform depositoMasCercano;
     private GameManager gm;
+    private Node actualNode;
+    private List<Vector3> path;
+    //private PathGenerator path;
     [HideInInspector]
     public string trabajo;
     //HAGO UN ENUM DE Estados
@@ -64,7 +67,7 @@ public class Aldeano : MonoBehaviour
 
     private void Start()
     {
-        
+        actualNode = gm.FindClosestNode(transform.position);
     }
     // Update is called once per frame
     void Update()
@@ -91,6 +94,12 @@ public class Aldeano : MonoBehaviour
                 CancelarAccion();
                 break;
         }
+
+    }
+
+    public void CheckNodeActual(Vector3 position)
+    {
+        actualNode = GeneradorDeNodos.GetClosestNode(position);
     }
     public void SetObjetivoTrabajo(GameObject _objetivoTrabajo)
     {
@@ -115,6 +124,7 @@ public class Aldeano : MonoBehaviour
     public void IrAMinar() {
         if (objetivoTrabajo.gameObject.activeSelf)
         {
+            //for(PathGenerator.GetPath(,))
             transform.LookAt(new Vector3(objetivoTrabajo.transform.position.x,transform.position.y, objetivoTrabajo.transform.position.z));
             transform.position = transform.position + transform.forward * speed;
         }

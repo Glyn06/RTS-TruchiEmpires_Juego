@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     public float recursoAlimento;
     public float recursoMadera;
     public static GameManager instanceGameManager;
+    public GeneradorDeNodos generadorNodos;
+    
     private void Awake()
     {
         if (instanceGameManager == null)
@@ -23,8 +25,13 @@ public class GameManager : MonoBehaviour
 
     }
     // Update is called once per frame
-    void Update()
+    //void Update()
+    //{
+
+    //}
+    public Node FindClosestNode(Vector3 pos)
     {
-        
+        return GeneradorDeNodos.GetClosestNode(pos);
     }
+   
 }

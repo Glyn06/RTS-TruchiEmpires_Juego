@@ -5,18 +5,18 @@ using UnityEngine;
 public class GeneradorDeNodos : MonoBehaviour
 {
 
-    public GameObject Terrain;
-    private int ancho = 1;
-    private int largo = 1;
-    public GameObject cursor;
-    public GameObject nodeObject;
-    //public float range;
-    //private Nodo nodoCrear;
-    private Vector3 vector;
-    private List<List<Node>> listaNodos;
-    private Vector3 OriginalPosition;
-    RaycastHit hit;
-    void Start()
+    public static GameObject Terrain;
+    private static int ancho = 1;
+    private static int largo = 1;
+    public static GameObject cursor;
+    public static GameObject nodeObject;
+    //public static float range;
+    //private static Nodo nodoCrear;
+    private static Vector3 vector;
+    private static List<List<Node>> listaNodos;
+    private static Vector3 OriginalPosition;
+    
+    private void Awake()
     {
         ancho = (int)Terrain.transform.localScale.x;
         ancho = ancho + 1;
@@ -26,7 +26,7 @@ public class GeneradorDeNodos : MonoBehaviour
         Debug.Log("Largo:" + largo);
         OriginalPosition = cursor.transform.position;
         listaNodos = new List<List<Node>>();
-        
+
         for (int i = 0; i < ancho; i++)
         {
             listaNodos.Add(new List<Node>());
@@ -38,10 +38,14 @@ public class GeneradorDeNodos : MonoBehaviour
                 listaNodos[i].Add(null);
             }
         }
+    }
+    void Start()
+    {
+        
         GenerarMapaDeNodos();
         SeteadorDeAdyasentes();
     }
-    private void GenerarMapaDeNodos()
+    private static void GenerarMapaDeNodos()
     {
         Vector3 actualPos = OriginalPosition;
 
@@ -69,48 +73,7 @@ public class GeneradorDeNodos : MonoBehaviour
             //transform.position = actualPos;
         }
     }
-        // Update is called once per frame
-        /*private void GenerarMapaDeNodos()
-        {
-            for (int i = 0; i < ancho; i++)
-            {
-                for (int j = 0; j < largo; j++)
-                {
-
-                    if (Physics.Raycast(cursor.transform.position, Vector3.down, out hit, Mathf.Infinity))
-                    {
-                        switch (hit.collider.tag)
-                        {
-                            case "Piso":
-                                if (hit.collider.transform.position != null)
-                                {
-                                    Node nodo = Instantiate(nodeObject, hit.point + new Vector3(0, 1f, 0), Quaternion.identity).GetComponent<Node>();
-                                    nodo.IsObstacle = false;
-                                    listaNodos[i][j] = nodo;
-                                }
-                                break;
-                            case "Mineral":
-                                if (hit.collider.transform.position != null)
-                                {
-                                    Node nodo = Instantiate(nodeObject, hit.point, Quaternion.identity).GetComponent<Node>();
-                                    nodo.IsObstacle = true;
-                                    listaNodos[i][j] = nodo;
-
-                                }
-                                break;
-                                //AGREGAR MAS CASE SI HAY MAS TAGS DE OBJETOS TEMPORALES EN EL MAPA COMO POR EJEMPLO UNA CONSTRUCCION.
-                        }
-
-                        //Debug.Log()
-                    }
-                    cursor.transform.position +=  new Vector3(1,0,0);
-                    //cursor.transform.position = OriginalPosition + new Vector3(i, 0, j);
-                }
-                cursor.transform.position += new Vector3(0, 0, 1);
-                //Debug.Log(listaNodos.Count);
-            }
-        }*/
-    private void SeteadorDeAdyasentes() {
+    private static void SeteadorDeAdyasentes() {
         for (int i = 0; i < ancho; i++)
         {
             for (int j = 0; j < largo; j++)
@@ -155,6 +118,17 @@ public class GeneradorDeNodos : MonoBehaviour
                 }
             }
         }
+    }
+    public static List<List<Node>> GetListNodes()
+    {
+        return listaNodos;
+    }
+    public static Node GetClosestNode(Vector3 pos)
+    {
+        int x = (int)(pos.x - OriginalPosition.x);
+        int y = (int)(pos.z - OriginalPosition.z);
+
+        return listaNodos[x][y];
     }
 }
 

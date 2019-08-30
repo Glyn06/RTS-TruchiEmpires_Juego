@@ -10,6 +10,7 @@ TagManager:
   - Deposito Minero
   - Piso
   - Obstaculo
+  - GeneradorNodos
   layers:
   - Default
   - TransparentFX

@@ -37,6 +37,21 @@ public class Nodo
             Adjacents.Add(nodo);
         }
     }
+    public Nodo GetAdyacente()
+    {
+        for (int i = 0; i < Adjacents.Count; i++)
+        {
+            if (!Adjacents[i].GetObstacle() && Adjacents[i].GetEstado() == EstadoNodo.Abierto)
+            {
+                return Adjacents[i];
+            }
+        }
+        return null;
+    }
+    public List<Nodo> GetAdyacentes()
+    {
+        return Adjacents;
+    }
     public void SetObstacle(bool _obstacle)
     {
         obstacle = _obstacle;

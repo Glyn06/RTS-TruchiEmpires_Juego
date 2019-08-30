@@ -46,6 +46,10 @@ public class ObjectClicked : MonoBehaviour
             {
                 return hit.transform.gameObject;
             }
+            else
+            {
+                return null;
+            }
         }
         GameObject empty = null;
         return empty;

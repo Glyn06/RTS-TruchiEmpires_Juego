@@ -146,12 +146,14 @@ public class Aldeano : MonoBehaviour
         if (objetivoTrabajo.gameObject.activeSelf)
         {
             nodoFinal = gm.FindClosestNode(objetivoTrabajo.transform.position);
+            Debug.Log("Nodo Inicial: " + actualNode);
+            Debug.Log("Nodo Final:" + nodoFinal);
             if (statePath == StatePath.Nulo)
             {
                 path = gm.pathGenerator.GetPath(actualNode, nodoFinal, PathfinderType.BreadthFirst);
                 for (int j = 0; j < path.Count; j++)
                 {
-                    Debug.Log(path[j]);
+                    //Debug.Log(path[j]);
                 }
                 statePath = StatePath.EnUso;
             }

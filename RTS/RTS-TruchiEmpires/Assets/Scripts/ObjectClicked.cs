@@ -5,7 +5,7 @@ using UnityEngine;
 public class ObjectClicked : MonoBehaviour
 {
     public float range;
-    public string objectSelect;
+    //public string objectSelect;
     private bool cancelarAccion;
     private Vector3 positionA;
     private Vector3 positionB;

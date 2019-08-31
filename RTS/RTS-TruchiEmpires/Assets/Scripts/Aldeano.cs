@@ -5,6 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class Aldeano : MonoBehaviour
 {
+    public enum StatePath
+    {
+        Nulo,
+        EnUso
+    }
+    private StatePath statePath;
     public float speed;
     public float capacity;
     private float cantOro;
@@ -20,7 +26,10 @@ public class Aldeano : MonoBehaviour
     private Transform depositoMasCercano;
     private GameManager gm;
     private Node actualNode;
+    private Node nodoFinal;
     private List<Vector3> path;
+    private bool generarNodoActual = true;
+    private int i = 0;
     //private PathGenerator path;
     [HideInInspector]
     public string trabajo;
@@ -45,6 +54,7 @@ public class Aldeano : MonoBehaviour
     }
     private void Awake()
     {
+        statePath = StatePath.Nulo;
         Depositos = new List<GameObject>();
         if (GameManager.instanceGameManager != null)
         {
@@ -67,21 +77,31 @@ public class Aldeano : MonoBehaviour
 
     private void Start()
     {
-        actualNode = gm.FindClosestNode(transform.position);
+        
     }
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("ESTADO MINERO: " + fsmMinero.GetCurrentState());
+        if (generarNodoActual)
+        {
+            actualNode = gm.FindClosestNode(transform.position);
+            if (actualNode == null)
+            {
+                Debug.Log("SOY NULO");
+            }
+            generarNodoActual = false;
+        }
         //HAGO EL SWITCH DE LA MAQUINA DE ESTADOS
         switch (fsmMinero.GetCurrentState()) {
             case (int)EstadosMinero.Idle:            
                 IdleMinero();
                 break;
             case (int)EstadosMinero.IrAMinar:
+                Debug.Log("llendo a minar");
                 IrAMinar();
                 break;
             case (int)EstadosMinero.Minando:
+                
                 Minar();
                 break;
             case (int)EstadosMinero.LLevarOro:
@@ -116,6 +136,7 @@ public class Aldeano : MonoBehaviour
         if (trabajo == "Minar")
         {
             fsmMinero.SendEvent((int)EventosMinero.ClickInMine);
+            i = 0;
         }
         else {
             //CORRER ANIMACION IDLE
@@ -124,9 +145,33 @@ public class Aldeano : MonoBehaviour
     public void IrAMinar() {
         if (objetivoTrabajo.gameObject.activeSelf)
         {
-            //for(PathGenerator.GetPath(,))
-            transform.LookAt(new Vector3(objetivoTrabajo.transform.position.x,transform.position.y, objetivoTrabajo.transform.position.z));
-            transform.position = transform.position + transform.forward * speed;
+            nodoFinal = gm.FindClosestNode(objetivoTrabajo.transform.position);
+            if (statePath == StatePath.Nulo)
+            {
+                path = gm.pathGenerator.GetPath(actualNode, nodoFinal, PathfinderType.BreadthFirst);
+                for (int j = 0; j < path.Count; j++)
+                {
+                    Debug.Log(path[j]);
+                }
+                statePath = StatePath.EnUso;
+            }
+           
+            Vector3 diff;
+            if(i < path.Count)
+            {
+                //Debug.Log("Sub indice:"+i);
+                Vector3 point = path[i];
+                point.y = transform.position.y;
+                transform.LookAt(point);
+                transform.position += transform.forward * speed * Time.deltaTime;
+                diff = point - this.transform.position;
+                if (diff.magnitude < 0.5f)
+                {
+                    i++;
+                }
+            }
+            //transform.LookAt(new Vector3(objetivoTrabajo.transform.position.x,transform.position.y, objetivoTrabajo.transform.position.z));
+            
         }
         else {
             fsmMinero.SendEvent((int)EstadosMinero.Idle);
@@ -154,6 +199,7 @@ public class Aldeano : MonoBehaviour
         BuscarAlmacenMasCercano();
         transform.LookAt(new Vector3(depositoMasCercano.position.x,transform.position.y,depositoMasCercano.position.z));
         transform.position = transform.position + transform.forward * speed;
+        //recorrer el getpath al reves
 
     }
     public void DepositarOro() {

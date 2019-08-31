@@ -7,7 +7,7 @@ public class PathGenerator : MonoBehaviour
     static List<Node> openNodes = new List<Node>();
     static List<Node> closeNodes = new List<Node>();
 
-    public static List<Vector3> GetPath(Node start, Node finish, PathfinderType pfT)
+    public List<Vector3> GetPath(Node start, Node finish, PathfinderType pfT)
     {
         Vector3 diff = finish.transform.position - start.transform.position;
         RaycastHit hit;

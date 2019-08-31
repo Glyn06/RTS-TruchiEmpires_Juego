@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public float recursoMadera;
     public static GameManager instanceGameManager;
     public GeneradorDeNodos generadorNodos;
+    public PathGenerator pathGenerator;
     
     private void Awake()
     {

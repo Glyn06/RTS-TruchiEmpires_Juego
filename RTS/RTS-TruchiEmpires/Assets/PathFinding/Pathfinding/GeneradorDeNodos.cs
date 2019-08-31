@@ -5,11 +5,11 @@ using UnityEngine;
 public class GeneradorDeNodos : MonoBehaviour
 {
 
-    public static GameObject Terrain;
-    private static int ancho = 1;
-    private static int largo = 1;
-    public static GameObject cursor;
-    public static GameObject nodeObject;
+    public GameObject Terrain;
+    private int ancho = 1;
+    private int largo = 1;
+    public GameObject cursor;
+    public GameObject nodeObject;
     //public static float range;
     //private static Nodo nodoCrear;
     private static Vector3 vector;
@@ -22,8 +22,6 @@ public class GeneradorDeNodos : MonoBehaviour
         ancho = ancho + 1;
         largo = (int)Terrain.transform.localScale.z;
         largo = largo + 1;
-        Debug.Log("Ancho:" + ancho);
-        Debug.Log("Largo:" + largo);
         OriginalPosition = cursor.transform.position;
         listaNodos = new List<List<Node>>();
 
@@ -45,7 +43,7 @@ public class GeneradorDeNodos : MonoBehaviour
         GenerarMapaDeNodos();
         SeteadorDeAdyasentes();
     }
-    private static void GenerarMapaDeNodos()
+    private void GenerarMapaDeNodos()
     {
         Vector3 actualPos = OriginalPosition;
 
@@ -59,11 +57,13 @@ public class GeneradorDeNodos : MonoBehaviour
                     if (hit.collider.tag != "Obstaculo")
                     {
                         Debug.Log("ENTRE");
-                        Node node = Instantiate(nodeObject, new Vector3(actualPos.x, hit.transform.position.y + 1.0f, actualPos.z), Quaternion.identity).GetComponent<Node>();
-                        listaNodos[i][j] = node;
+                        Node node = Instantiate(nodeObject, new Vector3(actualPos.x, Terrain.transform.position.y+1, actualPos.z), Quaternion.identity).GetComponent<Node>();
 
                         if (hit.collider.tag == "Mineral" || hit.collider.tag == "Centro Urbano")
+                        {
                             node.IsObstacle = true;
+                        }
+                        listaNodos[i][j] = node;
                     }
                 }
                 actualPos.x += 1.0f;
@@ -73,7 +73,7 @@ public class GeneradorDeNodos : MonoBehaviour
             //transform.position = actualPos;
         }
     }
-    private static void SeteadorDeAdyasentes() {
+    private void SeteadorDeAdyasentes() {
         for (int i = 0; i < ancho; i++)
         {
             for (int j = 0; j < largo; j++)
@@ -125,10 +125,10 @@ public class GeneradorDeNodos : MonoBehaviour
     }
     public static Node GetClosestNode(Vector3 pos)
     {
-        int x = (int)(pos.x - OriginalPosition.x);
+        int x = (int)(pos.x - OriginalPosition.x); // -5.5 - -9.5 = -15
         int y = (int)(pos.z - OriginalPosition.z);
-
-        return listaNodos[x][y];
+       
+        return listaNodos[x-1][y-1];
     }
 }
 

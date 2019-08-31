@@ -40,7 +40,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6158787338436406699}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 895199170b3e30b46a41731856ebf403, type: 3}
   m_Name: 
@@ -59,7 +59,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   range: 200
-  objectSelect: 
 --- !u!114 &6158787338436406695
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76,3 +75,5 @@ MonoBehaviour:
   recursoOro: 0
   recursoAlimento: 0
   recursoMadera: 0
+  generadorNodos: {fileID: 0}
+  pathGenerator: {fileID: 0}

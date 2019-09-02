@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class GeneradorDeNodos : MonoBehaviour
 {
-
+    int cantNodosCreados = 0;
     public GameObject Terrain;
     private int ancho = 1;
     private int largo = 1;
     public GameObject cursor;
     public GameObject nodeObject;
+    public float magnitud;
+    public bool restaurarNodo;
     //public static float range;
     //private static Nodo nodoCrear;
     private static Vector3 vector;
@@ -18,6 +20,7 @@ public class GeneradorDeNodos : MonoBehaviour
     
     private void Awake()
     {
+        restaurarNodo = false;
         ancho = (int)Terrain.transform.localScale.x;
         ancho = ancho + 1;
         largo = (int)Terrain.transform.localScale.z;
@@ -43,6 +46,10 @@ public class GeneradorDeNodos : MonoBehaviour
         GenerarMapaDeNodos();
         SeteadorDeAdyasentes();
     }
+    public void RestaorarNodo(Node stateOriginalNode, Node node)
+    {
+        node = stateOriginalNode;
+    }
     private void GenerarMapaDeNodos()
     {
         Vector3 actualPos = OriginalPosition;
@@ -51,6 +58,7 @@ public class GeneradorDeNodos : MonoBehaviour
         {
             for (int j = 0; j < largo; j++)
             {
+                
                 RaycastHit hit;
                 if (Physics.Raycast(actualPos, Vector3.down, out hit, actualPos.y))
                 {
@@ -58,7 +66,7 @@ public class GeneradorDeNodos : MonoBehaviour
                     {
                         //Debug.Log("ENTRE");
                         Node node = Instantiate(nodeObject, new Vector3(actualPos.x, Terrain.transform.position.y+1, actualPos.z), Quaternion.identity).GetComponent<Node>();
-
+                        cantNodosCreados++;
                         if (hit.collider.tag == "Mineral" || hit.collider.tag == "Centro Urbano")
                         {
                             node.IsObstacle = true;
@@ -72,6 +80,7 @@ public class GeneradorDeNodos : MonoBehaviour
             actualPos.z += 1.0f;
             //transform.position = actualPos;
         }
+        Debug.Log("NODOS CREADOS: "+cantNodosCreados);
     }
     private void SeteadorDeAdyasentes() {
         for (int i = 0; i < ancho; i++)
@@ -123,7 +132,7 @@ public class GeneradorDeNodos : MonoBehaviour
     {
         return listaNodos;
     }
-    public static Node GetClosestNode(Vector3 pos)
+    public Node GetClosestNode(Vector3 pos)
     {
         //int x = (int)(pos.x - OriginalPosition.x); // -5.5 - -9.5 = -15
         //int y = (int)(pos.z - OriginalPosition.z);
@@ -138,7 +147,7 @@ public class GeneradorDeNodos : MonoBehaviour
                 {
                     Vector3 point = listaNodos[i][j].transform.position;
                     diff = point - pos;
-                    if (diff.magnitude < 1f)
+                    if (diff.magnitude <= magnitud)
                     {
                         return listaNodos[i][j];
                     }

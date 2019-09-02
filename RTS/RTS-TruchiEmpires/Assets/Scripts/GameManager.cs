@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
     //}
     public Node FindClosestNode(Vector3 pos)
     {
-        return GeneradorDeNodos.GetClosestNode(pos);
+        return generadorNodos.GetClosestNode(pos);
     }
    
 }

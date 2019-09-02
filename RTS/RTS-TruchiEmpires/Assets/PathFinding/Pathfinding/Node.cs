@@ -5,6 +5,7 @@ public class Node : MonoBehaviour
     Node predecesor = null; 
     public NodeState nodeState;
     NodeAdy[] ady;
+    
     bool isObstacle = false;
 
     void Awake()
@@ -22,6 +23,7 @@ public class Node : MonoBehaviour
     {
         ady[(int)direction].node = node;
         ady[(int)direction].type = type;
+        
     }
 
     public NodeAdy[] GetNodeAdyacents()
@@ -45,7 +47,7 @@ public class Node : MonoBehaviour
     }
     private void OnTriggerStay(Collider other)
     {
-        /*switch (other.tag)
+        switch (other.tag)
         {
             case "Aldeano":
                 IsObstacle = true;
@@ -57,11 +59,11 @@ public class Node : MonoBehaviour
                 IsObstacle = true;
                 break;
                 
-        }*/
+        }
     }
     private void OnTriggerExit(Collider other)
     {
-        /*switch (other.tag)
+        switch (other.tag)
         {
             case "Aldeano":
                 IsObstacle = false;
@@ -72,6 +74,6 @@ public class Node : MonoBehaviour
             case "Mineral":
                 IsObstacle = false;
                 break;
-        }*/
+        }
     }
 }

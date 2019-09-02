@@ -3,43 +3,26 @@ using UnityEngine;
 
 public class PathGenerator : MonoBehaviour
 {
-    static List<Vector3> path = new List<Vector3>();
+    static List<Node> path = new List<Node>();
     static List<Node> openNodes = new List<Node>();
     static List<Node> closeNodes = new List<Node>();
 
-    public List<Vector3> GetPath(Node start, Node finish, PathfinderType pfT)
+    public List<Node> GetPath(Node start, Node finish, PathfinderType pfT)
     {
-        Vector3 diff = finish.transform.position - start.transform.position;
-        RaycastHit hit;
-
-        if (Physics.Raycast(start.transform.position, diff.normalized, out hit, diff.magnitude))
+        OpenNode(start, null);
+        Node node;
+        while (openNodes.Count > 0)
         {
-            if (hit.transform.tag == "Obstaculo" || hit.transform.tag == "Centro Urbano" || hit.collider.tag == "Mineral")
+            node = GetOpenNode(pfT);
+            if (node == finish)
             {
-                OpenNode(start, null);
-
-                while(openNodes.Count > 0)
-                {
-                    Node actualNode = GetOpenNode(pfT);
-
-                    if (actualNode == finish)
-                    {
-                        MakePath(actualNode);
-                        break;
-                    }
-
-                    CloseNode(actualNode);
-                    OpenAdyNodes(actualNode);
-                }
-
-                CleanNodes();
+                path = CreatePath(finish);
+                return path;
             }
-            else
-                MakePath(start, finish);
+            CloseNode(node);
+            OpenAdyNodes(node);
         }
-        else
-            MakePath(start, finish);
-
+        //path = CreatePath(finish);
         return path;
     }
 
@@ -52,18 +35,27 @@ public class PathGenerator : MonoBehaviour
 
     static void OpenNode(Node node, Node opener)
     {
+        openNodes.Add(node);
         node.nodeState = NodeState.Open;
         node.Predecesor = opener;
-        openNodes.Add(node);
+        
     }
 
     static void OpenAdyNodes(Node node)
     {
         NodeAdy[] adyNodes = node.GetNodeAdyacents();
 
-        for (int i = 0; i < (int)AdyDirection.Count; i++)
-            if (adyNodes[i].node && !adyNodes[i].node.IsObstacle && adyNodes[i].node.nodeState == NodeState.Ok)
-                OpenNode(adyNodes[i].node, node);
+        for (int i = 0; i < adyNodes.Length; i++)
+        {
+            if (adyNodes[i].node != null)
+            {
+                if (adyNodes[i].node && !adyNodes[i].node.IsObstacle && adyNodes[i].node.nodeState == NodeState.Ok)
+                {
+                    OpenNode(adyNodes[i].node, node);
+                    Debug.Log("ESTOY RECORRIENDO ADYACENTES Y AGREGANDO ABIERTOS");
+                }
+            }
+        }
     }
 
     static Node GetOpenNode(PathfinderType pfT)
@@ -87,31 +79,21 @@ public class PathGenerator : MonoBehaviour
 
         return node;
     }
-
-    static void MakePath(Node start, Node finish)
+    static List<Node> CreatePath(Node nodo)
     {
-        path = new List<Vector3>();
-
-        path.Add(start.transform.position);
-        path.Add(finish.transform.position);
-    }
-
-    static void MakePath(Node finish)
-    {
-        path = new List<Vector3>();
-
-        path.Add(finish.transform.position);
-
-        Node actualNode = finish;
-
-        while(actualNode.Predecesor)
+        List<Node> auxPath = new List<Node>();
+        do
         {
-            actualNode = actualNode.Predecesor;
-            path.Add(actualNode.transform.position);
-        }
+            if (nodo != null)
+            {
+                auxPath.Insert(0, nodo);
+                nodo = nodo.Predecesor;
+            }
+        } while (nodo != null);
 
-        path.Reverse();
+        return auxPath;
     }
+    
 
     static void CleanNodes()
     {

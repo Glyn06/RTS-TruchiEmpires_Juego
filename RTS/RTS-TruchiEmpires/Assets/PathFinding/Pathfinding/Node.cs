@@ -43,4 +43,35 @@ public class Node : MonoBehaviour
         get { return predecesor;  }
         set { predecesor = value; }
     }
+    private void OnTriggerStay(Collider other)
+    {
+        /*switch (other.tag)
+        {
+            case "Aldeano":
+                IsObstacle = true;
+                break;
+            case "Centro Urbano":
+                IsObstacle = true;
+                break;
+            case "Mineral":
+                IsObstacle = true;
+                break;
+                
+        }*/
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        /*switch (other.tag)
+        {
+            case "Aldeano":
+                IsObstacle = false;
+                break;
+            case "Centro Urbano":
+                IsObstacle = false;
+                break;
+            case "Mineral":
+                IsObstacle = false;
+                break;
+        }*/
+    }
 }

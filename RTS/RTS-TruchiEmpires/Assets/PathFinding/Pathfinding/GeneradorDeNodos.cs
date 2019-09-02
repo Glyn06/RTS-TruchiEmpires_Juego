@@ -56,7 +56,7 @@ public class GeneradorDeNodos : MonoBehaviour
                 {
                     if (hit.collider.tag != "Obstaculo")
                     {
-                        Debug.Log("ENTRE");
+                        //Debug.Log("ENTRE");
                         Node node = Instantiate(nodeObject, new Vector3(actualPos.x, Terrain.transform.position.y+1, actualPos.z), Quaternion.identity).GetComponent<Node>();
 
                         if (hit.collider.tag == "Mineral" || hit.collider.tag == "Centro Urbano")
@@ -125,10 +125,27 @@ public class GeneradorDeNodos : MonoBehaviour
     }
     public static Node GetClosestNode(Vector3 pos)
     {
-        int x = (int)(pos.x - OriginalPosition.x); // -5.5 - -9.5 = -15
-        int y = (int)(pos.z - OriginalPosition.z);
-       
-        return listaNodos[x-1][y-1];
+        //int x = (int)(pos.x - OriginalPosition.x); // -5.5 - -9.5 = -15
+        //int y = (int)(pos.z - OriginalPosition.z);
+
+        //return listaNodos[x-1][y-1];
+        Vector3 diff = Vector3.zero;
+        for (int i = 0; i < listaNodos.Count; i++)
+        {
+            for (int j = 0; j < listaNodos[i].Count; j++)
+            {
+                if (listaNodos[i][j] != null)
+                {
+                    Vector3 point = listaNodos[i][j].transform.position;
+                    diff = point - pos;
+                    if (diff.magnitude < 1f)
+                    {
+                        return listaNodos[i][j];
+                    }
+                }
+            }
+        }
+        return null;
     }
 }
 

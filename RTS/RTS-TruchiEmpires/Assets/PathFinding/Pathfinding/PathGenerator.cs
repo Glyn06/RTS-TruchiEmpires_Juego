@@ -52,7 +52,7 @@ public class PathGenerator : MonoBehaviour
                 if (adyNodes[i].node && !adyNodes[i].node.IsObstacle && adyNodes[i].node.nodeState == NodeState.Ok)
                 {
                     OpenNode(adyNodes[i].node, node);
-                    Debug.Log("ESTOY RECORRIENDO ADYACENTES Y AGREGANDO ABIERTOS");
+                    //Debug.Log("ESTOY RECORRIENDO ADYACENTES Y AGREGANDO ABIERTOS");
                 }
             }
         }
@@ -95,7 +95,7 @@ public class PathGenerator : MonoBehaviour
     }
     
 
-    static void CleanNodes()
+    public void CleanNodes()
     {
         while(openNodes.Count > 0)
         {

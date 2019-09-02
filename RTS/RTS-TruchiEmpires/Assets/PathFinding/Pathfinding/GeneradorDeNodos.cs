@@ -147,7 +147,11 @@ public class GeneradorDeNodos : MonoBehaviour
                 {
                     Vector3 point = listaNodos[i][j].transform.position;
                     diff = point - pos;
-                    if (diff.magnitude <= magnitud)
+                    if (listaNodos[i][j].transform.position.x == pos.x && listaNodos[i][j].transform.position.z == pos.z)
+                    {
+                        return listaNodos[i][j];
+                    }
+                    else if (diff.magnitude <= magnitud)
                     {
                         return listaNodos[i][j];
                     }

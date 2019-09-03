@@ -199,11 +199,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Aldeano
       objectReference: {fileID: 0}
-    - target: {fileID: 6210507063972576284, guid: 96b2cc5833f7f2944b084f4abcce2b04,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6210507063972576256, guid: 96b2cc5833f7f2944b084f4abcce2b04,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -261,8 +256,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6210507063972576259, guid: 96b2cc5833f7f2944b084f4abcce2b04,
         type: 3}
-      propertyPath: speed
-      value: 10
+      propertyPath: pathType
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96b2cc5833f7f2944b084f4abcce2b04, type: 3}
@@ -841,6 +836,11 @@ PrefabInstance:
       propertyPath: cameraAnchor
       value: 
       objectReference: {fileID: 231351759}
+    - target: {fileID: 6158787338436406696, guid: c8a1962c7d8bdca4ab79d116c0aa900c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6158787338436406695, guid: c8a1962c7d8bdca4ab79d116c0aa900c,
         type: 3}
       propertyPath: generadorNodos

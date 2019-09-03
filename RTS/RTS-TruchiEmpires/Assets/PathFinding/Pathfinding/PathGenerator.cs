@@ -7,8 +7,13 @@ public class PathGenerator : MonoBehaviour
     static List<Node> openNodes = new List<Node>();
     static List<Node> closeNodes = new List<Node>();
 
+    [Header("PostProcessing")]
+    public bool thetaStarMode = false;
+
+    Node finishNode = null;
     public List<Node> GetPath(Node start, Node finish, PathfinderType pfT)
     {
+        finishNode = finish;
         OpenNode(start, null);
         Node node;
         while (openNodes.Count > 0)
@@ -63,8 +68,11 @@ public class PathGenerator : MonoBehaviour
             }
         }
     }
-
-    static Node GetOpenNode(PathfinderType pfT)
+    private int Heuristic(Node actualNode)
+    {
+        return (int)Mathf.Abs(Mathf.Round((actualNode.transform.position - finishNode.transform.position).magnitude));
+    }
+    private Node GetOpenNode(PathfinderType pfT)
     {
         Node node = null;
 
@@ -78,9 +86,37 @@ public class PathGenerator : MonoBehaviour
                 node = openNodes[openNodes.Count - 1];
             break;
 
+            case PathfinderType.Dijkstra:
+                int index = 0;
+                int lowestValue = 9999999;
+
+                for (int i = 0; i < openNodes.Count; i++)
+                {
+                    if (openNodes[i].nodeValue.pathValue < lowestValue)
+                    {
+                        index = i;
+                        lowestValue = openNodes[i].nodeValue.pathValue;
+                    }
+                }
+
+                node = openNodes[index];
+                break;
+
             case PathfinderType.Star:
-                
-            break;
+                int starIndex = 0;
+                int starLowestValue = 9999999;
+
+                for (int i = 0; i < openNodes.Count; i++)
+                {
+                    if (openNodes[i].nodeValue.pathValue < starLowestValue)
+                    {
+                        starIndex = i;
+                        lowestValue = openNodes[i].nodeValue.pathValue + Heuristic(openNodes[i]);
+                    }
+                }
+
+                node = openNodes[starIndex];
+                break;
         }
 
         return node;
@@ -117,4 +153,5 @@ public class PathGenerator : MonoBehaviour
             closeNodes.RemoveAt(0);
         }
     }
+    
 }

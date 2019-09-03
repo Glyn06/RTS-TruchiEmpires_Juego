@@ -13,6 +13,7 @@ public class Aldeano : MonoBehaviour
     private StatePath statePath;
     public float speed;
     public float capacity;
+    public PathfinderType pathType;
     private float cantOro;
     private float cantPiedra;
     private float cantAlimento;
@@ -157,7 +158,7 @@ public class Aldeano : MonoBehaviour
                     nodoFinal.IsObstacle = false;
                 }
                 Debug.Log("ENTRE AL PATH");
-                path = gm.pathGenerator.GetPath(actualNode, nodoFinal, PathfinderType.BreadthFirst);
+                path = gm.pathGenerator.GetPath(actualNode, nodoFinal, pathType);
                 Debug.Log(path.Count);
                 statePath = StatePath.EnUso;
             }

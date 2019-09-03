@@ -43,6 +43,7 @@ public enum PathfinderType
 {
     BreadthFirst,
     DepthFirst,
+    Dijkstra,
     Star,
     Count
 }

@@ -6,7 +6,8 @@
 
 public struct NodeValue
 {
-    public float value;
+    public int pathValue;
+    public int value;
     public bool isDanger;
     public bool isRisky;
 
@@ -17,11 +18,17 @@ public struct NodeValue
         else
             value = (int)NodeValueMultipliers.Mud;
 
+        pathValue = value;
         isDanger = false;
         isRisky = false;
     }
 
-    public bool IsDanger 
+    public void ResetPathValue()
+    {
+        pathValue = value;
+    }
+
+    public bool IsDanger
     {
         get { return isDanger; }
         set
@@ -31,14 +38,14 @@ public struct NodeValue
                 isDanger = value;
 
                 if (isDanger)
-                    this.value *= (int)NodeValueMultipliers.Danger;
+                    this.value += (int)NodeValueMultipliers.Danger;
                 else
-                    this.value /= (int)NodeValueMultipliers.Danger;
+                    this.value -= (int)NodeValueMultipliers.Danger;
             }
         }
     }
 
-    public bool IsRisky 
+    public bool IsRisky
     {
         get { return isRisky; }
         set
@@ -46,11 +53,11 @@ public struct NodeValue
             if (isRisky != value)
             {
                 isRisky = value;
-                
+
                 if (isRisky)
-                    this.value *= (int)NodeValueMultipliers.Risky;
+                    this.value += (int)NodeValueMultipliers.Risky;
                 else
-                    this.value /= (int)NodeValueMultipliers.Risky;
+                    this.value -= (int)NodeValueMultipliers.Risky;
             }
         }
     }

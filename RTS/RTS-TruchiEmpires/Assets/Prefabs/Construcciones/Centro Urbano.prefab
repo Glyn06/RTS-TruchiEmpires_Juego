@@ -27,6 +27,7 @@ GameObject:
   - component: {fileID: 6736034678489729567}
   - component: {fileID: 6736034678489729565}
   - component: {fileID: 6736034678489729566}
+  - component: {fileID: 2316528710986085684}
   m_Layer: 0
   m_Name: Centro Urbano
   m_TagString: Centro Urbano
@@ -75,6 +76,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 8.858002, y: 7.762599, z: 2.097937}
   m_Center: {x: -3.269698, y: 3.6516929, z: 3.1844232}
+--- !u!114 &2316528710986085684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6736034678489729560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e754a857f2cdd84ca8b1f72179f0c68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6736034678385304776
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -86,11 +99,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Almacen
-      objectReference: {fileID: 0}
-    - target: {fileID: 8637920965944125321, guid: 78273f6b6a5d791429b228dc8a4526b0,
-        type: 3}
-      propertyPath: m_TagString
-      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 5104411371332862407, guid: 78273f6b6a5d791429b228dc8a4526b0,
         type: 3}
@@ -162,16 +170,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: 352432441246426132, guid: 78273f6b6a5d791429b228dc8a4526b0,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 3491014eb1c1470498aa5c1153f9ac53, type: 2}
     - target: {fileID: 7724841556455556416, guid: 78273f6b6a5d791429b228dc8a4526b0,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: d3722abf94e6a504eb962481c718a70e, type: 2}
+    - target: {fileID: 352432441246426132, guid: 78273f6b6a5d791429b228dc8a4526b0,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 3491014eb1c1470498aa5c1153f9ac53, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 78273f6b6a5d791429b228dc8a4526b0, type: 3}
 --- !u!1 &3070114106521535297 stripped

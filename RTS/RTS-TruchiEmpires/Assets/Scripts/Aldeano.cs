@@ -22,7 +22,7 @@ public class Aldeano : MonoBehaviour
     //Esta variable contendra la posicion donde se encuentra el trabajo a realizar(la posicion de la casa a construir o la mina la cual minar, etc).
     private GameObject objetivoTrabajo;
     private Transform posicionActual;
-    private Transform depositoMasCercano;
+    private GameObject depositoMasCercano;
     private GameManager gm;
     private Node actualNode;
     private Node nodoFinal;
@@ -149,7 +149,8 @@ public class Aldeano : MonoBehaviour
             {
                 CheckNodeActual(transform.position);
                 
-                nodoFinal = gm.FindClosestNode(objetivoTrabajo.transform.position);
+                nodoFinal = objetivoTrabajo.GetComponent<GameElement>().GetMyNode();
+                Debug.Log(objetivoTrabajo.GetComponent<GameElement>().GetMyNode().transform.position);
                 if (nodoFinal.IsObstacle == true)
                 {
                     nodoFinalObstaculo = true;
@@ -216,40 +217,50 @@ public class Aldeano : MonoBehaviour
         Debug.Log("Llevando el oro");
         //DEBERIA FIJARSE CUAL ES EL ALMACEN DE ORO O CENTRO URBANO MAS CERCANO
         BuscarAlmacenMasCercano();
-        if (statePath == StatePath.Nulo)
+        if (depositoMasCercano != null)
         {
-            //gm.pathGenerator.CleanNodes();
-            CheckNodeActual(transform.position);
-
-            nodoFinal = gm.FindClosestNode(depositoMasCercano.transform.position);
-            if (nodoFinal.IsObstacle == true)
+            if (statePath == StatePath.Nulo)
             {
-                nodoFinalObstaculo = true;
-                nodoFinal.IsObstacle = false;
-            }
+                //gm.pathGenerator.CleanNodes();
+                CheckNodeActual(transform.position);
 
-            Debug.Log("Coordenadas depositos mas cercanos: " + depositoMasCercano.transform.position);
-            Debug.Log("Posicion Nodo final " +nodoFinal.transform.position);
-            Debug.Log("Nodo Final obstaculo: " + nodoFinal.IsObstacle);
-            path = gm.pathGenerator.GetPath(actualNode, nodoFinal, PathfinderType.BreadthFirst);
-            Debug.Log("Count Path:"+path.Count);
-            statePath = StatePath.EnUso;
-        }
-        Vector3 diff;
-        if (path.Count > 0)
-        {
-            if (i < path.Count)
-            {
-                Vector3 point = path[i].transform.position;
-                point.y = transform.position.y;
-                transform.LookAt(point);
-                transform.position += transform.forward * speed * Time.deltaTime;
-                diff = point - this.transform.position;
-                if (diff.magnitude < 0.5f)
+                nodoFinal = depositoMasCercano.gameObject.GetComponent<GameElement>().GetMyNode();
+                Debug.Log(depositoMasCercano.GetComponent<GameElement>().GetMyNode().transform.position);
+                if (nodoFinal.IsObstacle == true)
                 {
-                    i++;
+                    nodoFinalObstaculo = true;
+                    nodoFinal.IsObstacle = false;
+                }
+                Debug.Log("Coordenadas depositos mas cercanos: " + depositoMasCercano.transform.position);
+                Debug.Log("Posicion Nodo final " + nodoFinal.transform.position);
+                Debug.Log("Nodo Final obstaculo: " + nodoFinal.IsObstacle);
+                path = gm.pathGenerator.GetPath(actualNode, nodoFinal, PathfinderType.BreadthFirst);
+                Debug.Log("Count Path:" + path.Count);
+                statePath = StatePath.EnUso;
+
+
+
+            }
+            Vector3 diff;
+            if (path.Count > 0)
+            {
+                if (i < path.Count)
+                {
+                    Vector3 point = path[i].transform.position;
+                    point.y = transform.position.y;
+                    transform.LookAt(point);
+                    transform.position += transform.forward * speed * Time.deltaTime;
+                    diff = point - this.transform.position;
+                    if (diff.magnitude < 0.5f)
+                    {
+                        i++;
+                    }
                 }
             }
+        }
+        else
+        {
+            fsmMinero.SendEvent((int)EventosMinero.Stop);
         }
 
     }
@@ -279,12 +290,12 @@ public class Aldeano : MonoBehaviour
     }
     public void BuscarAlmacenMasCercano()
     {
-        Depositos.Clear();
-        depositoMasCercano = SceneManager.GetActiveScene().GetRootGameObjects()[0].transform;
+        
         for (int i = 0; i < SceneManager.GetActiveScene().GetRootGameObjects().Length; i++)
         {
             if (SceneManager.GetActiveScene().GetRootGameObjects()[i].tag == "Centro Urbano" || SceneManager.GetActiveScene().GetRootGameObjects()[i].tag == "Deposito Minero")
             {
+                depositoMasCercano = SceneManager.GetActiveScene().GetRootGameObjects()[i].gameObject;
                 Depositos.Add(SceneManager.GetActiveScene().GetRootGameObjects()[i]);
 
             }
@@ -293,7 +304,7 @@ public class Aldeano : MonoBehaviour
         {
             if (Depositos[i].transform.position.magnitude < depositoMasCercano.transform.position.magnitude)
             {
-                depositoMasCercano= Depositos[i].transform;
+                depositoMasCercano = Depositos[i].gameObject;
             }
             
         }

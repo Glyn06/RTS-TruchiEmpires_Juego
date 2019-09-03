@@ -28,16 +28,22 @@ public class PathGenerator : MonoBehaviour
 
     static void CloseNode(Node node)
     {
-        node.nodeState = NodeState.Close;
-        openNodes.Remove(node);
-        closeNodes.Add(node);
+        if (node != null)
+        {
+            node.nodeState = NodeState.Close;
+            openNodes.Remove(node);
+            closeNodes.Add(node);
+        }
     }
 
     static void OpenNode(Node node, Node opener)
     {
-        openNodes.Add(node);
-        node.nodeState = NodeState.Open;
-        node.Predecesor = opener;
+        if (node != null)
+        {
+            openNodes.Add(node);
+            node.nodeState = NodeState.Open;
+            node.Predecesor = opener;
+        }
         
     }
 

@@ -17,7 +17,9 @@ public class GeneradorDeNodos : MonoBehaviour
     private static Vector3 vector;
     private static List<List<Node>> listaNodos;
     private static Vector3 OriginalPosition;
-    
+    [HideInInspector]
+    public bool NodesGenerates;
+
     private void Awake()
     {
         restaurarNodo = false;
@@ -45,6 +47,7 @@ public class GeneradorDeNodos : MonoBehaviour
         
         GenerarMapaDeNodos();
         SeteadorDeAdyasentes();
+        NodesGenerates = true;
     }
     public void RestaorarNodo(Node stateOriginalNode, Node node)
     {

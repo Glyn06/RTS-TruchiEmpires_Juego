@@ -2,34 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Recurso : GameElement
+public class CentroUrbano : GameElement
 {
     // Start is called before the first frame update
-    public float CantidadDeRecurso;
-
-    // Update is called once per frame
-    private void Start()
+    private void Update()
     {
-        CheckNodeCercano();
-    }
-    void Update()
-    {
-        checkAcabado();
         gm = GameManager.instanceGameManager;
         if (gm != null)
         {
+            Debug.Log(nodoGenerado);
             if (gm.generadorNodos.NodesGenerates && !nodoGenerado)
             {
+                Debug.Log("NODO GENERADO EN CENTRO URBANO");
                 nodoGenerado = true;
                 CheckNodeCercano();
             }
         }
     }
-    public void checkAcabado()
-    {
-        if (CantidadDeRecurso <= 0)
-        {
-            gameObject.SetActive(false);
-        }
-    }
+
+
+
 }

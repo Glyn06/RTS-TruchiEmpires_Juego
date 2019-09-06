@@ -151,13 +151,12 @@ public class Aldeano : MonoBehaviour
                 CheckNodeActual(transform.position);
                 
                 nodoFinal = objetivoTrabajo.GetComponent<GameElement>().GetMyNode();
-                Debug.Log(objetivoTrabajo.GetComponent<GameElement>().GetMyNode().transform.position);
                 if (nodoFinal.IsObstacle == true)
                 {
                     nodoFinalObstaculo = true;
                     nodoFinal.IsObstacle = false;
                 }
-                Debug.Log("ENTRE AL PATH");
+                //Debug.Log("ENTRE AL PATH");
                 path = gm.pathGenerator.GetPath(actualNode, nodoFinal, pathType);
                 Debug.Log(path.Count);
                 statePath = StatePath.EnUso;
@@ -232,11 +231,11 @@ public class Aldeano : MonoBehaviour
                     nodoFinalObstaculo = true;
                     nodoFinal.IsObstacle = false;
                 }
-                Debug.Log("Coordenadas depositos mas cercanos: " + depositoMasCercano.transform.position);
-                Debug.Log("Posicion Nodo final " + nodoFinal.transform.position);
-                Debug.Log("Nodo Final obstaculo: " + nodoFinal.IsObstacle);
+                //Debug.Log("Coordenadas depositos mas cercanos: " + depositoMasCercano.transform.position);
+                //Debug.Log("Posicion Nodo final " + nodoFinal.transform.position);
+                //Debug.Log("Nodo Final obstaculo: " + nodoFinal.IsObstacle);
                 path = gm.pathGenerator.GetPath(actualNode, nodoFinal, PathfinderType.BreadthFirst);
-                Debug.Log("Count Path:" + path.Count);
+                //Debug.Log("Count Path:" + path.Count);
                 statePath = StatePath.EnUso;
 
 
@@ -275,11 +274,6 @@ public class Aldeano : MonoBehaviour
             nodoFinal.IsObstacle = true;
             nodoFinalObstaculo = false;
         }
-        /*if (nodoInicialObstaculo)
-        {
-            nodoInicialObstaculo = false;
-            actualNode.IsObstacle = true;
-        }*/
         gm.recursoOro = gm.recursoOro + cantOro;
         cantOro = 0;
         fsmMinero.SendEvent((int)EventosMinero.ClickInMine);

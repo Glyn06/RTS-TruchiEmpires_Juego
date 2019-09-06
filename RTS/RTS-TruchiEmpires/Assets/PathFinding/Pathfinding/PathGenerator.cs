@@ -25,7 +25,7 @@ public class PathGenerator : MonoBehaviour
                 return path;
             }
             CloseNode(node);
-            OpenAdyNodes(node);
+            OpenAdyNodes(node,pfT);
         }
         //path = CreatePath(finish);
         return path;
@@ -48,11 +48,14 @@ public class PathGenerator : MonoBehaviour
             openNodes.Add(node);
             node.nodeState = NodeState.Open;
             node.Predecesor = opener;
+            
         }
+        
+        
         
     }
 
-    static void OpenAdyNodes(Node node)
+    static void OpenAdyNodes(Node node, PathfinderType pfT)
     {
         NodeAdy[] adyNodes = node.GetNodeAdyacents();
 
@@ -63,9 +66,18 @@ public class PathGenerator : MonoBehaviour
                 if (adyNodes[i].node && !adyNodes[i].node.IsObstacle && adyNodes[i].node.nodeState == NodeState.Ok)
                 {
                     OpenNode(adyNodes[i].node, node);
+                    if (pfT == PathfinderType.Dijkstra || pfT == PathfinderType.Star)
+                    {
+                        if (adyNodes[i].node.GetTotalCost() == 0 || adyNodes[i].node.GetTotalCost() > adyNodes[i].node.GetCost() + node.GetTotalCost())
+                        {
+                            adyNodes[i].node.SetTotalCost(adyNodes[i].node.GetCost() + node.GetTotalCost());
+                            adyNodes[i].node.Predecesor = node;
+                        }
+                    }
                     //Debug.Log("ESTOY RECORRIENDO ADYACENTES Y AGREGANDO ABIERTOS");
                 }
             }
+            
         }
     }
     private int Heuristic(Node actualNode)
@@ -88,14 +100,15 @@ public class PathGenerator : MonoBehaviour
 
             case PathfinderType.Dijkstra:
                 int index = 0;
-                int lowestValue = 9999999;
+                float lowestValue = 9999999;
 
                 for (int i = 0; i < openNodes.Count; i++)
                 {
-                    if (openNodes[i].nodeValue.pathValue < lowestValue)
+                    if (openNodes[i].GetTotalCost() < lowestValue)
                     {
                         index = i;
-                        lowestValue = openNodes[i].nodeValue.pathValue;
+                       
+                        lowestValue = openNodes[i].GetTotalCost();
                     }
                 }
 
@@ -104,14 +117,16 @@ public class PathGenerator : MonoBehaviour
 
             case PathfinderType.Star:
                 int starIndex = 0;
-                int starLowestValue = 9999999;
+                float starLowestValue = 9999999;
 
                 for (int i = 0; i < openNodes.Count; i++)
                 {
-                    if (openNodes[i].nodeValue.pathValue < starLowestValue)
+                    float heuristic = Heuristic(openNodes[i]);
+                    if (openNodes[i].GetTotalCost() + heuristic < starLowestValue)
                     {
                         starIndex = i;
-                        lowestValue = openNodes[i].nodeValue.pathValue + Heuristic(openNodes[i]);
+                        
+                        starLowestValue = openNodes[i].GetTotalCost() + heuristic;
                     }
                 }
 
@@ -143,6 +158,7 @@ public class PathGenerator : MonoBehaviour
         {
             openNodes[0].nodeState = NodeState.Ok;
             openNodes[0].Predecesor = null;
+            openNodes[0].SetTotalCost(0);
             openNodes.RemoveAt(0);
         }
 
@@ -150,6 +166,7 @@ public class PathGenerator : MonoBehaviour
         {
             closeNodes[0].nodeState = NodeState.Ok;
             closeNodes[0].Predecesor = null;
+            closeNodes[0].SetTotalCost(0);
             closeNodes.RemoveAt(0);
         }
     }

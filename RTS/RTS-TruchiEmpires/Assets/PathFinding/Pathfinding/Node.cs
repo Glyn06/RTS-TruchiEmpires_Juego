@@ -4,12 +4,11 @@ public class Node : MonoBehaviour
 {
     public NodeValue nodeValue;
     public bool taken = false;
-    Node predecesor = null; 
+    Node predecesor = null;  
     public NodeState nodeState;
     NodeAdy[] ady;
-    private int G_cost; //costo de la distancia del comienzo del nodo.
-    private int H_cost; //costo de la distancia del final del nodo;
-    private int F_cost; // G_cost + H_cost;
+    private float cost;
+    private float totalCost;
     bool isObstacle = false;
 
     void Awake()
@@ -49,27 +48,21 @@ public class Node : MonoBehaviour
         get { return predecesor;  }
         set { predecesor = value; }
     }
-    public void SetG_Cost(int g_cost)
+    public float GetCost()
     {
-        G_cost = g_cost;
+        return cost;
     }
-    public void SetH_Cost(int h_cost)
+    public void SetCost(float _cost)
     {
-        H_cost = h_cost;
+        cost = _cost;
     }
-    public int GetG_Cost()
+    public void SetTotalCost(float _totalCost)
     {
-        return G_cost;
+        totalCost = _totalCost;
     }
-    public int GetH_Cost()
+    public float GetTotalCost()
     {
-        return H_cost;
-    }
-    public int GetF_Cost()
-    {
-        F_cost = 0;
-        F_cost = H_cost + G_cost;
-        return F_cost;
+        return totalCost;
     }
     private void OnTriggerStay(Collider other)
     {

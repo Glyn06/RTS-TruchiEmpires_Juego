@@ -41,6 +41,7 @@ public enum NodeState
 
 public enum PathfinderType
 {
+    Nulo,
     BreadthFirst,
     DepthFirst,
     Dijkstra,

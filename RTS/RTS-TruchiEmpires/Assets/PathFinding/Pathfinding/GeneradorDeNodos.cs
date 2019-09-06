@@ -4,22 +4,23 @@ using UnityEngine;
 
 public class GeneradorDeNodos : MonoBehaviour
 {
-    int cantNodosCreados = 0;
+    [Header("Configuracion Del Costo")]
+    public float costNodePasto;
+    public float costNodePiso;
+    [Header("Variables Generales")]
     public GameObject Terrain;
-    private int ancho = 1;
-    private int largo = 1;
     public GameObject cursor;
     public GameObject nodeObject;
     public float magnitud;
     public bool restaurarNodo;
-    //public static float range;
-    //private static Nodo nodoCrear;
+    private int ancho = 1;
+    private int largo = 1;
     private static Vector3 vector;
     private static List<List<Node>> listaNodos;
     private static Vector3 OriginalPosition;
     [HideInInspector]
     public bool NodesGenerates;
-
+    int cantNodosCreados = 0;
     private void Awake()
     {
         restaurarNodo = false;
@@ -69,6 +70,17 @@ public class GeneradorDeNodos : MonoBehaviour
                     {
                         //Debug.Log("ENTRE");
                         Node node = Instantiate(nodeObject, new Vector3(actualPos.x, Terrain.transform.position.y+1, actualPos.z), Quaternion.identity).GetComponent<Node>();
+                        switch (hit.collider.tag)
+                        {
+                            case "Pasto":
+                                node.SetCost(costNodePasto);
+                                node.SetTotalCost(1);
+                                break;
+                            case "Piso":
+                                node.SetCost(costNodePiso);
+                                node.SetTotalCost(1);
+                                break;
+                        }
                         cantNodosCreados++;
                         if (hit.collider.tag == "Mineral" || hit.collider.tag == "Centro Urbano")
                         {
@@ -162,6 +174,29 @@ public class GeneradorDeNodos : MonoBehaviour
             }
         }
         return null;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (listaNodos == null)
+            return;
+
+        for (int i = 1; i < listaNodos.Count - 1; i++)
+        {
+            for (int j = 1; j < listaNodos[i].Count - 1; j++)
+            {
+                if (listaNodos[i][j])
+                {
+                    foreach (NodeAdy n in listaNodos[i][j].GetNodeAdyacents())
+                    {
+                        if (n.node)
+                        {
+                            Gizmos.DrawLine(n.node.transform.position, listaNodos[i][j].transform.position);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

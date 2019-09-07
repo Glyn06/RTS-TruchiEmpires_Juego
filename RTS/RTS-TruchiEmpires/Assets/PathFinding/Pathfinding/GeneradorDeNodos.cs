@@ -176,27 +176,36 @@ public class GeneradorDeNodos : MonoBehaviour
         return null;
     }
 
-    private void OnDrawGizmos()
-    {
-        if (listaNodos == null)
-            return;
+    //private void OnDrawGizmos()
+    //{
+    //    if (listaNodos == null)
+    //        return;
 
-        for (int i = 1; i < listaNodos.Count - 1; i++)
-        {
-            for (int j = 1; j < listaNodos[i].Count - 1; j++)
-            {
-                if (listaNodos[i][j])
-                {
-                    foreach (NodeAdy n in listaNodos[i][j].GetNodeAdyacents())
-                    {
-                        if (n.node)
-                        {
-                            Gizmos.DrawLine(n.node.transform.position, listaNodos[i][j].transform.position);
-                        }
-                    }
-                }
-            }
-        }
-    }
+    //    for (int i = 1; i < listaNodos.Count ; i++)
+    //    {
+    //        for (int j = 1; j < listaNodos[i].Count ; j++)
+    //        {
+    //            if (listaNodos[i][j])
+    //            {
+    //                foreach (NodeAdy n in listaNodos[i][j].GetNodeAdyacents())
+    //                {
+    //                    if (n.node)
+    //                    {
+    //                        Gizmos.DrawLine(n.node.transform.position, listaNodos[i][j].transform.position);
+    //                        if (listaNodos[i][j].nodeState == NodeState.Open)
+    //                        {
+    //                            Gizmos.color = Color.yellow;
+    //                        }
+    //                        if (listaNodos[i][j].nodeState == NodeState.Close)
+    //                        {
+    //                            Gizmos.color = Color.red;
+    //                        }
+    //                        Gizmos.DrawCube(listaNodos[i][j].transform.position, listaNodos[i][j].transform.localScale * 2.5f);
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
 }
 

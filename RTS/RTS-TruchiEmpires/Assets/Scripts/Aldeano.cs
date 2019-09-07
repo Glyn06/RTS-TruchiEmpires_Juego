@@ -36,7 +36,8 @@ public class Aldeano : MonoBehaviour
     [HideInInspector]
     public string trabajo;
     //HAGO UN ENUM DE Estados
-    public enum EstadosMinero {
+    public enum EstadosMinero
+    {
         Idle,
         IrAMinar,
         Minando,
@@ -46,7 +47,8 @@ public class Aldeano : MonoBehaviour
         Count
     }
     //HAGO UN ENUM DE Eventos
-    public enum EventosMinero {
+    public enum EventosMinero
+    {
         ClickInMine,
         CollisionMine,
         FullCapasity,
@@ -94,8 +96,9 @@ public class Aldeano : MonoBehaviour
             generarNodoActual = false;
         }
         //HAGO EL SWITCH DE LA MAQUINA DE ESTADOS
-        switch (fsmMinero.GetCurrentState()) {
-            case (int)EstadosMinero.Idle:            
+        switch (fsmMinero.GetCurrentState())
+        {
+            case (int)EstadosMinero.Idle:
                 IdleMinero();
                 break;
             case (int)EstadosMinero.IrAMinar:
@@ -130,7 +133,8 @@ public class Aldeano : MonoBehaviour
         posicionActual = _posicionActual;
     }
     //HAGO LAS FUNCIONES QUE VA A LLAMAR EL SWITCH DE LA MAQUINA DE ESTADOS UBICADA EN EL Update()
-    public void IdleMinero() {
+    public void IdleMinero()
+    {
         //Animacion del minero con un cacho de oro en caso de tenerlo
         //sino tiene oro en sima se ejecuta la animacion "Idle" del aldeano en si
         if (trabajo == "Minar")
@@ -138,18 +142,20 @@ public class Aldeano : MonoBehaviour
             fsmMinero.SendEvent((int)EventosMinero.ClickInMine);
             i = 0;
         }
-        else {
+        else
+        {
             //CORRER ANIMACION IDLE
         }
     }
-    public void IrAMinar() {
+    public void IrAMinar()
+    {
         Debug.Log("Yendo a Minar");
         if (objetivoTrabajo.gameObject.activeSelf)
         {
             if (statePath == StatePath.Nulo)
             {
                 CheckNodeActual(transform.position);
-                
+
                 nodoFinal = objetivoTrabajo.GetComponent<GameElement>().GetMyNode();
                 if (nodoFinal.IsObstacle == true)
                 {
@@ -161,7 +167,7 @@ public class Aldeano : MonoBehaviour
                 Debug.Log(path.Count);
                 statePath = StatePath.EnUso;
             }
-           
+
             Vector3 diff;
             if (path.Count > 0)
             {
@@ -179,13 +185,15 @@ public class Aldeano : MonoBehaviour
                     }
                 }
             }
-            
+
         }
-        else {
+        else
+        {
             fsmMinero.SendEvent((int)EstadosMinero.Idle);
         }
     }
-    public void Minar() {
+    public void Minar()
+    {
         Debug.Log("Minando");
         i = 0;
         //SE EJECUTA LA ANIMACION DE MINAR
@@ -195,7 +203,8 @@ public class Aldeano : MonoBehaviour
             cantOro = cantOro + Time.deltaTime;
             Debug.Log("cantOro: " + (int)cantOro);
         }
-        if (cantOro >= capacity) {
+        if (cantOro >= capacity)
+        {
             Debug.Log("FULL CAPASITY");
             fsmMinero.SendEvent((int)EventosMinero.FullCapasity);
         }
@@ -210,10 +219,11 @@ public class Aldeano : MonoBehaviour
         }
         gm.pathGenerator.CleanNodes();
         path.Clear();
-        
+
 
     }
-    public void LLevarOro() {
+    public void LLevarOro()
+    {
         Debug.Log("Llevando el oro");
         //DEBERIA FIJARSE CUAL ES EL ALMACEN DE ORO O CENTRO URBANO MAS CERCANO
         BuscarAlmacenMasCercano();
@@ -264,7 +274,8 @@ public class Aldeano : MonoBehaviour
         }
 
     }
-    public void DepositarOro() {
+    public void DepositarOro()
+    {
         Debug.Log("Depositando oro");
         i = 0;
         //Debug.Log("DEPOSITANDO ORO");
@@ -280,12 +291,13 @@ public class Aldeano : MonoBehaviour
         gm.pathGenerator.CleanNodes();
 
     }
-    public void CancelarAccion() {
+    public void CancelarAccion()
+    {
         //TODAVIA NO HACE NADA
     }
     public void BuscarAlmacenMasCercano()
     {
-        
+
         for (int i = 0; i < SceneManager.GetActiveScene().GetRootGameObjects().Length; i++)
         {
             if (SceneManager.GetActiveScene().GetRootGameObjects()[i].tag == "Centro Urbano" || SceneManager.GetActiveScene().GetRootGameObjects()[i].tag == "Deposito Minero")
@@ -301,7 +313,7 @@ public class Aldeano : MonoBehaviour
             {
                 depositoMasCercano = Depositos[i].gameObject;
             }
-            
+
         }
     }
 
@@ -317,7 +329,7 @@ public class Aldeano : MonoBehaviour
         }
         //Debug.Log(trabajo);
 
-        
+
         if (cantOro >= capacity)
         {
             fsmMinero.SendEvent((int)EventosMinero.FullCapasity);
@@ -335,6 +347,18 @@ public class Aldeano : MonoBehaviour
     {
         if (trabajo == "Minar" && other.gameObject.tag == "Mineral")
         {
+        }
+    }
+    private void OnDrawGizmos()
+    {
+        if (path == null)
+        {
+            return;
+        }
+        foreach (Node n in path)
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawCube(n.transform.position, n.transform.localScale * 2.5f);
         }
     }
 }

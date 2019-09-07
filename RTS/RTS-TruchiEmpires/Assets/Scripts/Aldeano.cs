@@ -291,6 +291,21 @@ public class Aldeano : MonoBehaviour
         gm.pathGenerator.CleanNodes();
 
     }
+    public void FindNodeActual()
+    {
+        for (int i = 0; i < path.Count; i++)
+        {
+            RaycastHit Hit;
+            //EL VECTOR MAGNITUD DEBE TENER COMO PARAMETROS: (Vector Destino - Vector Origen).
+            Vector3 Destino = objetivoTrabajo.transform.position;
+            Vector3 distanceOfObjetive = transform.position - objetivoTrabajo.transform.position;// HAGO LA MAGNITUD DE ESTO PARA SABER LA DISTANCIA ENTRE LOS
+            //DOS
+            //if (Physics.Raycast(transform.position, (Destino - transform.position).normalized, Vector3.Distance(Destino, transform.position)))
+            //{
+                
+            //}
+        }
+    }
     public void CancelarAccion()
     {
         //TODAVIA NO HACE NADA
@@ -316,7 +331,6 @@ public class Aldeano : MonoBehaviour
 
         }
     }
-
     private void OnTriggerStay(Collider other)
     {
         //Debug.Log("COLISIONE");

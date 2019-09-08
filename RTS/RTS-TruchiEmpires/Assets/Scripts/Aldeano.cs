@@ -163,7 +163,7 @@ public class Aldeano : MonoBehaviour
                     nodoFinal.IsObstacle = false;
                 }
                 //Debug.Log("ENTRE AL PATH");
-                path = gm.pathGenerator.GetPath(actualNode, nodoFinal, pathType);
+                CheckPath();
                 Debug.Log(path.Count);
                 statePath = StatePath.EnUso;
             }
@@ -244,7 +244,7 @@ public class Aldeano : MonoBehaviour
                 //Debug.Log("Coordenadas depositos mas cercanos: " + depositoMasCercano.transform.position);
                 //Debug.Log("Posicion Nodo final " + nodoFinal.transform.position);
                 //Debug.Log("Nodo Final obstaculo: " + nodoFinal.IsObstacle);
-                path = gm.pathGenerator.GetPath(actualNode, nodoFinal, PathfinderType.BreadthFirst);
+                CheckPath();
                 //Debug.Log("Count Path:" + path.Count);
                 statePath = StatePath.EnUso;
 
@@ -291,19 +291,58 @@ public class Aldeano : MonoBehaviour
         gm.pathGenerator.CleanNodes();
 
     }
-    public void FindNodeActual()
+    public Node FindNodeActual()
     {
+        Node node = null;
         for (int i = 0; i < path.Count; i++)
         {
-            RaycastHit Hit;
-            //EL VECTOR MAGNITUD DEBE TENER COMO PARAMETROS: (Vector Destino - Vector Origen).
-            Vector3 Destino = objetivoTrabajo.transform.position;
-            Vector3 distanceOfObjetive = transform.position - objetivoTrabajo.transform.position;// HAGO LA MAGNITUD DE ESTO PARA SABER LA DISTANCIA ENTRE LOS
-            //DOS
+            if (i + 1 < path.Count)
+            {
+                if (path[i + 1] != null)
+                {
+                    RaycastHit Hit;
+                    Vector3 MyDistanceOfObjetive = transform.position - objetivoTrabajo.transform.position;
+                    Vector3 NodeDistaceOfObjetive = path[i + 1].transform.position - objetivoTrabajo.transform.position;
+                    if (MyDistanceOfObjetive.magnitude > NodeDistaceOfObjetive.magnitude)
+                    {
+
+                        Vector3 Destino = path[i + 1].transform.position;
+                        if (Physics.Raycast(transform.position, (Destino - transform.position).normalized, out Hit, Vector3.Distance(Destino, transform.position)))
+                        {
+                            if (Hit.collider.tag != "Obstaculo" && Hit.collider.tag != "Mineral")
+                            {
+                                return path[i + 1];
+                            }
+                        }
+
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
             //if (Physics.Raycast(transform.position, (Destino - transform.position).normalized, Vector3.Distance(Destino, transform.position)))
             //{
-                
+
             //}
+        }
+        return node;
+    }
+    public void CheckPath()
+    {
+        path = gm.pathGenerator.GetPath(actualNode, nodoFinal, pathType);
+        if (pathType != PathfinderType.DepthFirst)
+        {
+            Node node = FindNodeActual();
+            if (node == null)
+            {
+                path = gm.pathGenerator.GetPath(actualNode, nodoFinal, pathType);
+            }
+            else if (node != null)
+            {
+                path = path = gm.pathGenerator.GetPath(node, nodoFinal, pathType);
+            }
         }
     }
     public void CancelarAccion()

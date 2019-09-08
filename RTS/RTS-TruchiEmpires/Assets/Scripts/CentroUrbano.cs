@@ -10,7 +10,7 @@ public class CentroUrbano : GameElement
         gm = GameManager.instanceGameManager;
         if (gm != null)
         {
-            Debug.Log(nodoGenerado);
+            //Debug.Log(nodoGenerado);
             if (gm.generadorNodos.NodesGenerates && !nodoGenerado)
             {
                 Debug.Log("NODO GENERADO EN CENTRO URBANO");

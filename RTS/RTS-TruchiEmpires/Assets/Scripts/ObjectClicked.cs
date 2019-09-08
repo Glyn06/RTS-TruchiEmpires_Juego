@@ -32,6 +32,8 @@ public class ObjectClicked : MonoBehaviour
             {
                 seleccion1.GetComponent<Aldeano>().SetObjetivoTrabajo(seleccion2);
                 seleccion1.GetComponent<Aldeano>().trabajo = "Minar";
+                seleccion1 = null;
+                seleccion2 = null;
             }
         }
     }

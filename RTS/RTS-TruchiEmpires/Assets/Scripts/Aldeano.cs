@@ -83,6 +83,10 @@ public class Aldeano : MonoBehaviour
 
     private void Start()
     {
+        if (GameManager.instanceGameManager != null)
+        {
+            gm = GameManager.instanceGameManager;
+        }
         nodoFinalObstaculo = false;
         nodoInicialObstaculo = false;
         statePath = StatePath.Nulo;
@@ -92,8 +96,11 @@ public class Aldeano : MonoBehaviour
     {
         if (generarNodoActual)
         {
-            actualNode = gm.FindClosestNode(transform.position);
-            generarNodoActual = false;
+            if (gm != null)
+            {
+                actualNode = gm.FindClosestNode(transform.position);
+                generarNodoActual = false;
+            }
         }
         //HAGO EL SWITCH DE LA MAQUINA DE ESTADOS
         switch (fsmMinero.GetCurrentState())
@@ -122,7 +129,10 @@ public class Aldeano : MonoBehaviour
 
     public void CheckNodeActual(Vector3 position)
     {
-        actualNode = gm.generadorNodos.GetClosestNode(position);
+        if (gm != null)
+        {
+            actualNode = gm.generadorNodos.GetClosestNode(position);
+        }
     }
     public void SetObjetivoTrabajo(GameObject _objetivoTrabajo)
     {

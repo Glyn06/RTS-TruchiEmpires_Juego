@@ -15,12 +15,10 @@ public class GameElement : MonoBehaviour
     {
         if (GameManager.instanceGameManager != null)
         {
-            Debug.Log("Instancie GM");
             gm = GameManager.instanceGameManager;
         }
         if (gm != null && gm.generadorNodos.GetClosestNode(transform.position) != null)
         {
-            Debug.Log("CREE MyNode");
             myNode = gm.generadorNodos.GetClosestNode(transform.position);
         }
     }

@@ -13,6 +13,7 @@ public class PathGenerator : MonoBehaviour
     Node finishNode = null;
     public List<Node> GetPath(Node start, Node finish, PathfinderType pfT)
     {
+        CleanNodes();
         finishNode = finish;
         OpenNode(start, null);
         Node node;

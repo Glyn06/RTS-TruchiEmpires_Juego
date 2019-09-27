@@ -14,9 +14,7 @@ public class NodeAction : Nodo
     {
         if(state == NodeState.running)
         {
-                   
-
-            
+           
         }
        
     }

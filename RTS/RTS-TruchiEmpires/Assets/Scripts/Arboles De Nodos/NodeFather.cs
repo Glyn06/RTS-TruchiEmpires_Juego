@@ -6,6 +6,10 @@ public class NodeFather : Nodo
 {
     // https://www.gamasutra.com/blogs/ChrisSimpson/20140717/221339/Behavior_trees_for_AI_How_they_work.php
     List<Nodo> nodes;
+    private void Start()
+    {
+        tipoNodo = "NodeFather";
+    }
     public void CheckNodes()
     {
         foreach (Nodo n in nodes)

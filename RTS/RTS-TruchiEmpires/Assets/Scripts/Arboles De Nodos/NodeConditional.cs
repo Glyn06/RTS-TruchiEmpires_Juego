@@ -5,12 +5,21 @@ using UnityEngine;
 public class NodeConditional : Nodo
 {
     //if ok returns fail, else returns ok
+    private void Start()
+    {
+        tipoNodo = "Conditional";
+    }
     public int Conditional()
     {
-        if (state == NodeState.fail)
+        switch (state)
         {
-            return 2;       //ok
+            case NodeState.ok:
+                return (int)NodeState.ok;
+            case NodeState.running:
+                return (int)NodeState.fail;
+            case NodeState.fail:
+                return (int)NodeState.fail;
         }
-        return 3;           //fail
+        return (int)NodeState.fail;           //fail
     }
 }

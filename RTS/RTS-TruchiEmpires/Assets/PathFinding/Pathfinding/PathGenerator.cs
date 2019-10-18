@@ -19,7 +19,9 @@ public class PathGenerator : MonoBehaviour
         Node node;
         while (openNodes.Count > 0)
         {
+            //Visito el nodo.//
             node = GetOpenNode(pfT);
+            //---------------//
             if (node == finish)
             {
                 path = CreatePath(finish);
@@ -28,7 +30,6 @@ public class PathGenerator : MonoBehaviour
             CloseNode(node);
             OpenAdyNodes(node,pfT);
         }
-        //path = CreatePath(finish);
         return path;
     }
 
@@ -49,11 +50,7 @@ public class PathGenerator : MonoBehaviour
             openNodes.Add(node);
             node.nodeState = NodeState.Open;
             node.Predecesor = opener;
-            
         }
-        
-        
-        
     }
 
     static void OpenAdyNodes(Node node, PathfinderType pfT)
@@ -87,6 +84,7 @@ public class PathGenerator : MonoBehaviour
     }
     private Node GetOpenNode(PathfinderType pfT)
     {
+        //ESTA FUNCION VENDRIA A SER LA FUNCION DE VISITAR NODO
         Node node = null;
 
         switch(pfT)

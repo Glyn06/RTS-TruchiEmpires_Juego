@@ -45,7 +45,6 @@ public class GeneradorDeNodos : MonoBehaviour
     }
     void Start()
     {
-        
         GenerarMapaDeNodos();
         SeteadorDeAdyasentes();
         NodesGenerates = true;

@@ -9,7 +9,10 @@ public class AIBoid : MonoBehaviour
     public Vector3 FinalPosition;
     public ObjectClicked objectClicked;
     public float rootSpeed;
-
+    public float radioDeVision;
+    [SerializeField]
+    private LayerMask layerMask;
+    private Collider[] BoidsColliders;
     void Start()
     {
         if (ObjectClicked.instanceObjectClicked != null)
@@ -25,6 +28,7 @@ public class AIBoid : MonoBehaviour
         CheckMyDireccion();
         MovementLerp();
         CheckFinalPosition();
+        CheckBoidsEnRango();
     }
     public void CheckFinalPosition()
     {
@@ -35,11 +39,20 @@ public class AIBoid : MonoBehaviour
     }
     public void MovementLerp()
     {
-        transform.position += transform.forward/50;
+        transform.position += transform.forward / 50;
         transform.forward = Vector3.Slerp(transform.forward, FinalPosition, rootSpeed * Time.deltaTime);
     }
     public void CheckMyDireccion()
     {
         myDirection = transform.forward;
     }
+    public void CheckBoidsEnRango()
+    {
+        BoidsColliders = Physics.OverlapSphere(transform.position, radioDeVision, layerMask);
+    }
+    public Collider[] GetBoidCollider()
+    {
+        return BoidsColliders;
+    }
+
 }

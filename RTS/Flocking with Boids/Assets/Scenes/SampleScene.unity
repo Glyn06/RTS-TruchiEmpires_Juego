@@ -535,10 +535,31 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5283862312104452237, guid: 75e4a5ec6aab42d479dd47d4e7f8858a,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: -8083561018052325465, guid: 75e4a5ec6aab42d479dd47d4e7f8858a,
         type: 3}
       propertyPath: objectClicked
       value: 
       objectReference: {fileID: 579300786}
-    m_RemovedComponents: []
+    - target: {fileID: -8083561018052325465, guid: 75e4a5ec6aab42d479dd47d4e7f8858a,
+        type: 3}
+      propertyPath: layerMask.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
+    - target: {fileID: 9024461654361262125, guid: 75e4a5ec6aab42d479dd47d4e7f8858a,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.268
+      objectReference: {fileID: 0}
+    - target: {fileID: 9024461654361262125, guid: 75e4a5ec6aab42d479dd47d4e7f8858a,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.56797504
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 2609091576709427184, guid: 75e4a5ec6aab42d479dd47d4e7f8858a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 75e4a5ec6aab42d479dd47d4e7f8858a, type: 3}

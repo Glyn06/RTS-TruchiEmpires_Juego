@@ -4,16 +4,14 @@ using UnityEngine;
 
 public class AIFlocking : MonoBehaviour
 {
-    void Start()
+    
+    public Vector3 Flocking(AIBoid myBoid)
     {
-        
+        Vector3 direccionFinal = Vector3.zero;
+        direccionFinal = Alineacion(myBoid) + Cohesion(myBoid) + Separacion(myBoid);
+        direccionFinal = direccionFinal / 3;
+        return direccionFinal;
     }
-
-    void Update()
-    {
-        
-    }
-
     public Vector3 Alineacion(AIBoid myBoid)
     {
         Vector3 promedioDirecciones = Vector3.zero;

@@ -48,8 +48,22 @@ public class AIFlocking : MonoBehaviour
         }
         return promedioPosiciones;
     }
-    public Vector3 Separacion()
+    public Vector3 Separacion(AIBoid myBoid)
     {
-        return Vector3.zero;
+        Vector3 VectorResultante = myBoid.transform.position;
+        if (myBoid.GetBoidCollider().Length > 0)
+        {
+            for (int i = 0; i < myBoid.GetBoidCollider().Length; i++)
+            {
+                if (myBoid != myBoid.GetBoidCollider()[i])
+                {
+                    VectorResultante = VectorResultante + (myBoid.GetBoidCollider()[i].transform.position - myBoid.transform.position).normalized;
+                }
+            }
+            VectorResultante = VectorResultante * -1;
+            VectorResultante = VectorResultante.normalized;
+        }
+        return VectorResultante;
     }
+
 }

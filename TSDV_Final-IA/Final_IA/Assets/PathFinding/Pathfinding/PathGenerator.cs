@@ -7,8 +7,8 @@ public class PathGenerator : MonoBehaviour
     static List<Node> openNodes = new List<Node>();
     static List<Node> closeNodes = new List<Node>();
 
-    [Header("PostProcessing")]
-    public bool thetaStarMode = false;
+    //[Header("PostProcessing")]
+    //public bool thetaStarMode = false;
 
     Node finishNode = null;
     public List<Node> GetPath(Node start, Node finish, PathfinderType pfT)
@@ -32,8 +32,7 @@ public class PathGenerator : MonoBehaviour
         }
         return path;
     }
-
-    static void CloseNode(Node node)
+    public static void CloseNode(Node node)
     {
         if (node != null)
         {
@@ -41,9 +40,9 @@ public class PathGenerator : MonoBehaviour
             openNodes.Remove(node);
             closeNodes.Add(node);
         }
-    }
+    } 
 
-    static void OpenNode(Node node, Node opener)
+    public static void OpenNode(Node node, Node opener)
     {
         if (node != null)
         {
@@ -52,7 +51,6 @@ public class PathGenerator : MonoBehaviour
             node.Predecesor = opener;
         }
     }
-
     static void OpenAdyNodes(Node node, PathfinderType pfT)
     {
         NodeAdy[] adyNodes = node.GetNodeAdyacents();
@@ -72,10 +70,8 @@ public class PathGenerator : MonoBehaviour
                             adyNodes[i].node.Predecesor = node;
                         }
                     }
-                    //Debug.Log("ESTOY RECORRIENDO ADYACENTES Y AGREGANDO ABIERTOS");
                 }
             }
-            
         }
     }
     private int Heuristic(Node actualNode)
@@ -169,5 +165,4 @@ public class PathGenerator : MonoBehaviour
             closeNodes.RemoveAt(0);
         }
     }
-    
 }

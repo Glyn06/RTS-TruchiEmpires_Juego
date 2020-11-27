@@ -259,6 +259,11 @@ PrefabInstance:
       propertyPath: pathType
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 6210507063972576259, guid: 96b2cc5833f7f2944b084f4abcce2b04,
+        type: 3}
+      propertyPath: numeroMinero
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 96b2cc5833f7f2944b084f4abcce2b04, type: 3}
 --- !u!1 &494910949
@@ -361,6 +366,11 @@ PrefabInstance:
     - target: {fileID: 6210507063972576259, guid: 96b2cc5833f7f2944b084f4abcce2b04,
         type: 3}
       propertyPath: pathType
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6210507063972576259, guid: 96b2cc5833f7f2944b084f4abcce2b04,
+        type: 3}
+      propertyPath: numeroMinero
       value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -573,7 +583,7 @@ PrefabInstance:
     - target: {fileID: 6210507063972576256, guid: 96b2cc5833f7f2944b084f4abcce2b04,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -9.24
+      value: 0.59
       objectReference: {fileID: 0}
     - target: {fileID: 6210507063972576256, guid: 96b2cc5833f7f2944b084f4abcce2b04,
         type: 3}
@@ -583,7 +593,7 @@ PrefabInstance:
     - target: {fileID: 6210507063972576256, guid: 96b2cc5833f7f2944b084f4abcce2b04,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.8
+      value: 2.77
       objectReference: {fileID: 0}
     - target: {fileID: 6210507063972576256, guid: 96b2cc5833f7f2944b084f4abcce2b04,
         type: 3}
@@ -628,6 +638,11 @@ PrefabInstance:
     - target: {fileID: 6210507063972576259, guid: 96b2cc5833f7f2944b084f4abcce2b04,
         type: 3}
       propertyPath: pathType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6210507063972576259, guid: 96b2cc5833f7f2944b084f4abcce2b04,
+        type: 3}
+      propertyPath: numeroMinero
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -991,6 +1006,11 @@ PrefabInstance:
     - target: {fileID: 6210507063972576259, guid: 96b2cc5833f7f2944b084f4abcce2b04,
         type: 3}
       propertyPath: pathType
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6210507063972576259, guid: 96b2cc5833f7f2944b084f4abcce2b04,
+        type: 3}
+      propertyPath: numeroMinero
       value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -94,7 +94,7 @@ public class GeneradorDeNodos : MonoBehaviour
             actualPos.z += 1.0f;
             //transform.position = actualPos;
         }
-        Debug.Log("NODOS CREADOS: "+cantNodosCreados);
+        //Debug.Log("NODOS CREADOS: "+cantNodosCreados);
     }
     private void SeteadorDeAdyasentes() {
         for (int i = 0; i < ancho; i++)

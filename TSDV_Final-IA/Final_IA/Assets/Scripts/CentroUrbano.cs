@@ -13,7 +13,7 @@ public class CentroUrbano : GameElement
             //Debug.Log(nodoGenerado);
             if (gm.generadorNodos.NodesGenerates && !nodoGenerado)
             {
-                Debug.Log("NODO GENERADO EN CENTRO URBANO");
+                //Debug.Log("NODO GENERADO EN CENTRO URBANO");
                 nodoGenerado = true;
                 CheckNodeCercano();
             }

@@ -10,6 +10,10 @@ public class Node : MonoBehaviour
     private float totalCost;
     bool isObstacle = false;
 
+    int costAgua = 2;
+    int costPasto = 1;
+    int costPiso = 0;
+
     void Awake()
     {
         ady = new NodeAdy[(int)AdyDirection.Count];
@@ -19,6 +23,7 @@ public class Node : MonoBehaviour
             ady[i].node = null;
             ady[i].type = NodeAdyType.Straight;
         }
+        cost = costPiso;
     }
     
     public void AddAdyNode(Node node, NodeAdyType type, AdyDirection direction)
@@ -75,6 +80,9 @@ public class Node : MonoBehaviour
                 break;
             case "Mineral":
                 IsObstacle = true;
+                break;
+            case "Agua":
+                cost = cost + costAgua;
                 break;
                 
         }

@@ -14,6 +14,8 @@ public class Aldeano : GameElement
 
     private StatePath statePath;
     public float speed;
+    public float normalSpeed;
+    public float waterSpeed;
     public float capacity;
     public PathfinderType pathType;
     [SerializeField] private float cantOro;
@@ -98,6 +100,8 @@ public class Aldeano : GameElement
         fsm.SetRelations((int)EstadosAldeano.MoverAldeano, (int)EstadosAldeano.Idle, (int)EventosAldeano.Stop);
         fsm.SetRelations((int)EstadosAldeano.MoverAldeano, (int)EstadosAldeano.LLevarOro, (int)EventosAldeano.ClickInHouse);
         fsm.SetRelations((int)EstadosAldeano.MoverAldeano, (int)EstadosAldeano.IrAMinar, (int)EventosAldeano.ClickInMine);
+        normalSpeed = speed;
+        waterSpeed = normalSpeed / 2;
     }
 
     private void Start()
@@ -246,40 +250,47 @@ public class Aldeano : GameElement
         if (statePath == StatePath.Nulo)
         {
             CheckNodeActual(transform.position);
-
-            nodoFinal = objetivoTrabajo.GetComponent<GameElement>().GetMyNode();
-            if (nodoFinal.IsObstacle == true)
+            if (objetivoTrabajo != null && objetivoTrabajo.GetComponent<GameElement>() != null)
             {
-                nodoFinalObstaculo = true;
-                nodoFinal.IsObstacle = false;
-            }
-            //Debug.Log("ENTRE AL PATH");
-            CheckPath();
-            //Debug.Log(path.Count);
-            statePath = StatePath.EnUso;
-        }
-
-        Vector3 diff;
-        if (path.Count > 0)
-        {
-            if (i < path.Count)
-            {
-                //Debug.Log("Sub indice:"+i);
-                Vector3 point = path[i].transform.position;
-                point.y = transform.position.y;
-                transform.LookAt(point);
-                transform.position += transform.forward * speed * Time.deltaTime;
-                diff = point - this.transform.position;
-                if (diff.magnitude < 0.5f)
+                nodoFinal = objetivoTrabajo.GetComponent<GameElement>().GetMyNode();
+                if (nodoFinal != null)
                 {
-                    i++;
+                    if (nodoFinal.IsObstacle == true)
+                    {
+                        nodoFinalObstaculo = true;
+                        nodoFinal.IsObstacle = false;
+                    }
+                    //Debug.Log("ENTRE AL PATH");
+                    CheckPath();
+                    //Debug.Log(path.Count);
+                    statePath = StatePath.EnUso;
                 }
             }
-            else
+        }
+        if (nodoFinal != null)
+        {
+            Vector3 diff;
+            if (path.Count > 0)
             {
-                FinishPath();
-                fsm.SendEvent((int)EventosAldeano.Stop);
-                trabajo = " ";
+                if (i < path.Count)
+                {
+                    //Debug.Log("Sub indice:"+i);
+                    Vector3 point = path[i].transform.position;
+                    point.y = transform.position.y;
+                    transform.LookAt(point);
+                    transform.position += transform.forward * speed * Time.deltaTime;
+                    diff = point - this.transform.position;
+                    if (diff.magnitude < 0.5f)
+                    {
+                        i++;
+                    }
+                }
+                else
+                {
+                    FinishPath();
+                    fsm.SendEvent((int)EventosAldeano.Stop);
+                    trabajo = " ";
+                }
             }
         }
 
@@ -494,6 +505,12 @@ public class Aldeano : GameElement
         {
             fsm.SendEvent((int)EventosAldeano.FullCapasity);
         }
+
+        if (other.tag == "Agua")
+        {
+            speed = waterSpeed;
+            Debug.Log("WATER SPEED");
+        }
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -507,6 +524,10 @@ public class Aldeano : GameElement
         if ((trabajo == "Minar" || trabajo == "Llevar Oro") && other.gameObject.tag == "Mineral")
         {
             fsm.SendEvent((int)EventosAldeano.FullCapasity);
+        }
+        if (other.tag == "Agua")
+        {
+            speed = normalSpeed;
         }
     }
     private void OnDrawGizmos()

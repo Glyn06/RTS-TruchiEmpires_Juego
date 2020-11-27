@@ -15,6 +15,9 @@ public class ObjectClicked : MonoBehaviour
     private bool Cancelar;
     private int clicks;
     // Update is called once per frame
+    [SerializeField] private GameObject auxObject;
+    private Vector3 auxPosition;
+    [SerializeField] private GameObject auxParents;
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
@@ -24,13 +27,13 @@ public class ObjectClicked : MonoBehaviour
         if (seleccion1 != null && Input.GetKeyDown(KeyCode.Mouse1))
         {
             seleccion2 = CheckHitMouse();
-            if (seleccion1 != null && seleccion1.tag == "Aldeano" && seleccion2 != null && seleccion2.tag == "Piso")
+            if (seleccion1 != null && seleccion1.tag == "Aldeano" && seleccion2 != null && (seleccion2.tag == "Piso" || seleccion2.tag == "Pasto"))
             {
                 RaycastHit hit;
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out hit, range))
                 {
-                    seleccion2.transform.position = hit.point;
+                    auxPosition = hit.point;
                 }
             }
         }
@@ -51,7 +54,6 @@ public class ObjectClicked : MonoBehaviour
                 {
                     aldeano.GetComponent<Aldeano>().SetObjetivoTrabajo(seleccion2);
                     aldeano.GetComponent<Aldeano>().trabajo = "Llevar Oro";
-                    
                 }
                 else
                 {
@@ -61,9 +63,9 @@ public class ObjectClicked : MonoBehaviour
                 seleccion1 = null;
                 seleccion2 = null;
             }
-            else if (seleccion1.tag == "Aldeano" && seleccion2.tag == "Piso")
+            else if (seleccion1.tag == "Aldeano" && (seleccion2.tag == "Piso" || seleccion2.tag == "Pasto"))
             {
-                seleccion1.GetComponent<Aldeano>().SetObjetivoTrabajo(seleccion2);
+                seleccion1.GetComponent<Aldeano>().SetObjetivoTrabajo(Instantiate(auxObject, auxPosition, Quaternion.identity, auxParents.transform));
                 seleccion1.GetComponent<Aldeano>().trabajo = "Mover Aldeano";
                 seleccion1 = null;
                 seleccion2 = null;

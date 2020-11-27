@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Aldeano : MonoBehaviour
+public class Aldeano : GameElement
 {
     public enum StatePath
     {
@@ -26,7 +26,7 @@ public class Aldeano : MonoBehaviour
     private GameObject objetivoTrabajo;
     private Transform posicionActual;
     private GameObject depositoMasCercano;
-    private GameManager gm;
+    //private GameManager gm;
     private Node actualNode;
     private Node nodoFinal;
     private List<Node> path;
@@ -95,6 +95,8 @@ public class Aldeano : MonoBehaviour
         fsm.SetRelations((int)EstadosAldeano.IrAMinar, (int)EstadosAldeano.MoverAldeano, (int)EventosAldeano.ClickInMap);
         fsm.SetRelations((int)EstadosAldeano.Minando, (int)EstadosAldeano.MoverAldeano, (int)EventosAldeano.ClickInMap);
         fsm.SetRelations((int)EstadosAldeano.MoverAldeano, (int)EstadosAldeano.Idle, (int)EventosAldeano.Stop);
+        fsm.SetRelations((int)EstadosAldeano.MoverAldeano, (int)EstadosAldeano.LLevarOro, (int)EventosAldeano.ClickInHouse);
+        fsm.SetRelations((int)EstadosAldeano.MoverAldeano, (int)EstadosAldeano.IrAMinar, (int)EventosAldeano.ClickInMine);
     }
 
     private void Start()
@@ -137,6 +139,9 @@ public class Aldeano : MonoBehaviour
             case (int)EstadosAldeano.DepositarOro:
                 DepositarOro();
                 break;
+            case (int)EstadosAldeano.MoverAldeano:
+                MoverAldeano();
+                break;
             case (int)EstadosAldeano.CancelarAccion:
                 CancelarAccion();
                 break;
@@ -176,56 +181,113 @@ public class Aldeano : MonoBehaviour
                 break;
         }
     }
+    public void MoverAldeano()
+    {
+        if (statePath == StatePath.Nulo)
+        {
+            CheckNodeActual(transform.position);
+            objetivoTrabajo.GetComponent<GameElement>().CheckNodeCercano();
+            nodoFinal = objetivoTrabajo.GetComponent<GameElement>().GetMyNode();
+            if (nodoFinal.IsObstacle == true)
+            {
+                nodoFinalObstaculo = true;
+                nodoFinal.IsObstacle = false;
+            }
+            //Debug.Log("ENTRE AL PATH");
+            CheckPath();
+            //Debug.Log(path.Count);
+            statePath = StatePath.EnUso;
+        }
+
+        Vector3 diff;
+        if (path.Count > 0)
+        {
+            if (i < path.Count)
+            {
+                //Debug.Log("Sub indice:"+i);
+                Vector3 point = path[i].transform.position;
+                point.y = transform.position.y;
+                transform.LookAt(point);
+                transform.position += transform.forward * speed * Time.deltaTime;
+                diff = point - this.transform.position;
+                if (diff.magnitude < 0.5f)
+                {
+                    i++;
+                }
+            }
+            else
+            {
+                Destroy(objetivoTrabajo);
+                FinishPath();
+                fsm.SendEvent((int)EventosAldeano.Stop);
+                trabajo = " ";
+            }
+        }
+
+        if (trabajo == "Llevar Oro")
+        {
+            Destroy(objetivoTrabajo);
+            FinishPath();
+            fsm.SendEvent((int)EventosAldeano.ClickInHouse);
+        }
+       
+        if (trabajo == "Minar")
+        {
+            Destroy(objetivoTrabajo);
+            FinishPath();
+            fsm.SendEvent((int)EventosAldeano.ClickInMine);
+        }
+    }
     public void IrAMinar()
     {
-        //Debug.Log("Yendo a Minar");
-        //if (objetivoTrabajo.gameObject.activeSelf)
-        //{
-            if (statePath == StatePath.Nulo)
-            {
-                CheckNodeActual(transform.position);
+        if (statePath == StatePath.Nulo)
+        {
+            CheckNodeActual(transform.position);
 
-                nodoFinal = objetivoTrabajo.GetComponent<GameElement>().GetMyNode();
-                if (nodoFinal.IsObstacle == true)
-                {
-                    nodoFinalObstaculo = true;
-                    nodoFinal.IsObstacle = false;
-                }
-                //Debug.Log("ENTRE AL PATH");
-                CheckPath();
-                //Debug.Log(path.Count);
-                statePath = StatePath.EnUso;
+            nodoFinal = objetivoTrabajo.GetComponent<GameElement>().GetMyNode();
+            if (nodoFinal.IsObstacle == true)
+            {
+                nodoFinalObstaculo = true;
+                nodoFinal.IsObstacle = false;
             }
+            //Debug.Log("ENTRE AL PATH");
+            CheckPath();
+            //Debug.Log(path.Count);
+            statePath = StatePath.EnUso;
+        }
 
-            Vector3 diff;
-            if (path.Count > 0)
+        Vector3 diff;
+        if (path.Count > 0)
+        {
+            if (i < path.Count)
             {
-                if (i < path.Count)
+                //Debug.Log("Sub indice:"+i);
+                Vector3 point = path[i].transform.position;
+                point.y = transform.position.y;
+                transform.LookAt(point);
+                transform.position += transform.forward * speed * Time.deltaTime;
+                diff = point - this.transform.position;
+                if (diff.magnitude < 0.5f)
                 {
-                    //Debug.Log("Sub indice:"+i);
-                    Vector3 point = path[i].transform.position;
-                    point.y = transform.position.y;
-                    transform.LookAt(point);
-                    transform.position += transform.forward * speed * Time.deltaTime;
-                    diff = point - this.transform.position;
-                    if (diff.magnitude < 0.5f)
-                    {
-                        i++;
-                    }
-                }
-                else
-                {
-                    FinishPath();
-                    fsm.SendEvent((int)EventosAldeano.Stop);
-                    trabajo = " ";
+                    i++;
                 }
             }
+            else
+            {
+                FinishPath();
+                fsm.SendEvent((int)EventosAldeano.Stop);
+                trabajo = " ";
+            }
+        }
 
         if (trabajo == "Llevar Oro")
         {
             fsm.SendEvent((int)EventosAldeano.ClickInHouse);
         }
-        //}
+        if (trabajo == "Mover Aldeano")
+        {
+            fsm.SendEvent((int)EventosAldeano.ClickInMap);
+        }
     }
     public void Minar()
     {
@@ -250,6 +312,10 @@ public class Aldeano : MonoBehaviour
         {
             fsm.SendEvent((int)EventosAldeano.ClickInHouse);
         }
+        if (trabajo == "Mover Aldeano")
+        {
+            fsm.SendEvent((int)EventosAldeano.ClickInMap);
+        }
     }
     public void LLevarOro()
     {
@@ -258,7 +324,7 @@ public class Aldeano : MonoBehaviour
         BuscarAlmacenMasCercano();
         if (depositoMasCercano != null)
         {
-            
+
             if (statePath == StatePath.Nulo)
             {
                 //gm.pathGenerator.CleanNodes();
@@ -278,7 +344,7 @@ public class Aldeano : MonoBehaviour
                 //Debug.Log("Count Path:" + path.Count);
                 statePath = StatePath.EnUso;
             }
-            
+
             Vector3 diff;
             if (path.Count > 0)
             {
@@ -296,7 +362,6 @@ public class Aldeano : MonoBehaviour
                 }
             }
         }
-
     }
     public void DepositarOro()
     {
@@ -393,7 +458,7 @@ public class Aldeano : MonoBehaviour
     }
     public void BuscarAlmacenMasCercano()
     {
-       
+
         for (int i = 0; i < SceneManager.GetActiveScene().GetRootGameObjects().Length; i++)
         {
             if (SceneManager.GetActiveScene().GetRootGameObjects()[i].tag == "Centro Urbano" || SceneManager.GetActiveScene().GetRootGameObjects()[i].tag == "Deposito Minero")

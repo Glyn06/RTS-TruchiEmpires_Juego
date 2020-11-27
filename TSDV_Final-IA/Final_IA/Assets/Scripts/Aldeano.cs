@@ -120,8 +120,7 @@ public class Aldeano : GameElement
                 generarNodoActual = false;
             }
         }
-        //HAGO EL SWITCH DE LA MAQUINA DE ESTADOS
-        //Debug.Log((EstadosMinero)fsmMinero.GetCurrentState() + ": " + numeroMinero);
+        
         switch (fsm.GetCurrentState())
         {
             case (int)EstadosAldeano.Idle:
@@ -331,17 +330,15 @@ public class Aldeano : GameElement
                 CheckNodeActual(transform.position);
 
                 nodoFinal = depositoMasCercano.gameObject.GetComponent<GameElement>().GetMyNode();
-                //Debug.Log(depositoMasCercano.GetComponent<GameElement>().GetMyNode().transform.position);
+
                 if (nodoFinal.IsObstacle == true)
                 {
                     nodoFinalObstaculo = true;
                     nodoFinal.IsObstacle = false;
                 }
-                //Debug.Log("Coordenadas depositos mas cercanos: " + depositoMasCercano.transform.position);
-                //Debug.Log("Posicion Nodo final " + nodoFinal.transform.position);
-                //Debug.Log("Nodo Final obstaculo: " + nodoFinal.IsObstacle);
+                
                 CheckPath();
-                //Debug.Log("Count Path:" + path.Count);
+                
                 statePath = StatePath.EnUso;
             }
 
@@ -372,13 +369,13 @@ public class Aldeano : GameElement
         if (objetivoTrabajo.activeSelf)
         {
             fsm.SendEvent((int)EventosAldeano.ClickInMine);
-            //Debug.Log("VOLVI AL CLICK IN MINE");
+            
         }
         else
         {
             fsm.SendEvent((int)EventosAldeano.Stop);
             trabajo = " ";
-            //Debug.Log("TOMATE UN DESCANSO PERRO");
+           
         }
 
         if (trabajo == "Llevar Oro")
@@ -533,6 +530,8 @@ public class Aldeano : GameElement
 
     public void SetMadera(float _cantMadera) => cantMadera = _cantMadera;
     public float GetMadera() { return cantMadera; }
+
+    public GameObject GetObjetivoTrabajo() { return objetivoTrabajo; }
     #endregion
 
 }

@@ -65,8 +65,18 @@ public class ObjectClicked : MonoBehaviour
             }
             else if (seleccion1.tag == "Aldeano" && (seleccion2.tag == "Piso" || seleccion2.tag == "Pasto"))
             {
-                seleccion1.GetComponent<Aldeano>().SetObjetivoTrabajo(Instantiate(auxObject, auxPosition, Quaternion.identity, auxParents.transform));
-                seleccion1.GetComponent<Aldeano>().trabajo = "Mover Aldeano";
+                Aldeano aldeano = seleccion1.GetComponent<Aldeano>();
+                string currentWork = aldeano.trabajo;
+                if (currentWork == "Mover Aldeano")
+                {
+                    if(aldeano.GetObjetivoTrabajo() != null)
+                    {
+                        Destroy(aldeano.GetObjetivoTrabajo());
+                        aldeano.FinishPath();
+                    }
+                }
+                aldeano.SetObjetivoTrabajo(Instantiate(auxObject, auxPosition, Quaternion.identity, auxParents.transform));
+                aldeano.trabajo = "Mover Aldeano";
                 seleccion1 = null;
                 seleccion2 = null;
             }

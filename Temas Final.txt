@@ -1,0 +1,7 @@
+TEMAS:
+-FSM
+-Pathfinding
+-Flocking
+-Beahviour Trees
+-Redes neuronales
+-Adgoritmo Genetico

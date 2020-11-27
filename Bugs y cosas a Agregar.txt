@@ -1,2 +1,0 @@
--Los Aldeanos se traban si se chocan al pasar por un mismo camino.
--Hacer que los aldeanos se puedan mover hacia donde yo quiera (poder interrumpir el movimiento de mi aldeano a voluntad y asignarle otro destino).

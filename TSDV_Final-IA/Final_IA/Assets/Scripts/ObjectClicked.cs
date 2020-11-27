@@ -69,7 +69,7 @@ public class ObjectClicked : MonoBehaviour
                 string currentWork = aldeano.trabajo;
                 if (currentWork == "Mover Aldeano")
                 {
-                    if(aldeano.GetObjetivoTrabajo() != null)
+                    if(aldeano.GetObjetivoTrabajo() != null && aldeano.GetObjetivoTrabajo().tag == "Destruible")
                     {
                         Destroy(aldeano.GetObjetivoTrabajo());
                         aldeano.FinishPath();

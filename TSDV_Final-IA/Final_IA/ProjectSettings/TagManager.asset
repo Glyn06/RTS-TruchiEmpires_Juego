@@ -12,6 +12,7 @@ TagManager:
   - Obstaculo
   - GeneradorNodos
   - Pasto
+  - Destruible
   layers:
   - Default
   - TransparentFX

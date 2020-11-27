@@ -79,6 +79,7 @@ public class Aldeano : GameElement
         fsm.SetRelations((int)EstadosAldeano.IrAMinar, (int)EstadosAldeano.Minando, (int)EventosAldeano.CollisionMine);
         fsm.SetRelations((int)EstadosAldeano.IrAMinar, (int)EstadosAldeano.CancelarAccion, (int)EventosAldeano.Stop);
         fsm.SetRelations((int)EstadosAldeano.Minando, (int)EstadosAldeano.LLevarOro, (int)EventosAldeano.FullCapasity);
+        fsm.SetRelations((int)EstadosAldeano.Minando, (int)EstadosAldeano.IrAMinar, (int)EventosAldeano.ClickInMine);
         fsm.SetRelations((int)EstadosAldeano.Minando, (int)EstadosAldeano.CancelarAccion, (int)EventosAldeano.Stop);
         fsm.SetRelations((int)EstadosAldeano.LLevarOro, (int)EstadosAldeano.DepositarOro, (int)EventosAldeano.CollisionHouse);
         fsm.SetRelations((int)EstadosAldeano.LLevarOro, (int)EstadosAldeano.CancelarAccion, (int)EventosAldeano.Stop);
@@ -216,7 +217,8 @@ public class Aldeano : GameElement
             }
             else
             {
-                Destroy(objetivoTrabajo);
+                if (objetivoTrabajo != null && objetivoTrabajo.tag == "Destruible")
+                    Destroy(objetivoTrabajo);
                 FinishPath();
                 fsm.SendEvent((int)EventosAldeano.Stop);
                 trabajo = " ";
@@ -225,14 +227,16 @@ public class Aldeano : GameElement
 
         if (trabajo == "Llevar Oro")
         {
-            Destroy(objetivoTrabajo);
+            if(objetivoTrabajo != null && objetivoTrabajo.tag == "Destruible")
+                Destroy(objetivoTrabajo);
             FinishPath();
             fsm.SendEvent((int)EventosAldeano.ClickInHouse);
         }
        
         if (trabajo == "Minar")
         {
-            Destroy(objetivoTrabajo);
+            if (objetivoTrabajo != null && objetivoTrabajo.tag == "Destruible")
+                Destroy(objetivoTrabajo);
             FinishPath();
             fsm.SendEvent((int)EventosAldeano.ClickInMine);
         }
@@ -482,7 +486,10 @@ public class Aldeano : GameElement
             other.gameObject.GetComponent<Recurso>().CantidadDeRecurso = other.gameObject.GetComponent<Recurso>().CantidadDeRecurso - Time.deltaTime;
             path.Clear();
         }
-
+        else if (other.gameObject != objetivoTrabajo && trabajo == "Minar" && other.gameObject.tag == "Mineral" && cantOro < capacity)
+        {
+            fsm.SendEvent((int)EventosAldeano.ClickInMine);
+        }
         if (cantOro >= capacity)
         {
             fsm.SendEvent((int)EventosAldeano.FullCapasity);

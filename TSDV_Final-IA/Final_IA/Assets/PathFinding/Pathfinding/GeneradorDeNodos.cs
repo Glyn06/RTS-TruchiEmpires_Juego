@@ -21,6 +21,7 @@ public class GeneradorDeNodos : MonoBehaviour
     [HideInInspector]
     public bool NodesGenerates;
     int cantNodosCreados = 0;
+    [SerializeField] private GameObject parentNodes;
     private void Awake()
     {
         restaurarNodo = false;
@@ -68,7 +69,7 @@ public class GeneradorDeNodos : MonoBehaviour
                     if (hit.collider.tag != "Obstaculo")
                     {
                         //Debug.Log("ENTRE");
-                        Node node = Instantiate(nodeObject, new Vector3(actualPos.x, Terrain.transform.position.y+1, actualPos.z), Quaternion.identity).GetComponent<Node>();
+                        Node node = Instantiate(nodeObject, new Vector3(actualPos.x, Terrain.transform.position.y+1, actualPos.z), Quaternion.identity, parentNodes.transform).GetComponent<Node>();
                         switch (hit.collider.tag)
                         {
                             case "Pasto":

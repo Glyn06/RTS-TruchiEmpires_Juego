@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,11 +16,11 @@ public class Aldeano : MonoBehaviour
     public float speed;
     public float capacity;
     public PathfinderType pathType;
-    private float cantOro;
-    private float cantPiedra;
-    private float cantAlimento;
-    private float cantMadera;
-    private FSM fsmMinero;
+    [SerializeField] private float cantOro;
+    [SerializeField] private float cantPiedra;
+    [SerializeField] private float cantAlimento;
+    [SerializeField] private float cantMadera;
+    private FSM fsm;
     private List<GameObject> Depositos;
     //Esta variable contendra la posicion donde se encuentra el trabajo a realizar(la posicion de la casa a construir o la mina la cual minar, etc).
     private GameObject objetivoTrabajo;
@@ -39,7 +38,7 @@ public class Aldeano : MonoBehaviour
     [HideInInspector]
     public string trabajo;
     //HAGO UN ENUM DE Estados
-    public enum EstadosMinero
+    public enum EstadosAldeano
     {
         Idle,
         IrAMinar,
@@ -47,12 +46,15 @@ public class Aldeano : MonoBehaviour
         LLevarOro,
         DepositarOro,
         CancelarAccion,
+        MoverAldeano,
         Count
     }
     //HAGO UN ENUM DE Eventos
-    public enum EventosMinero
+    public enum EventosAldeano
     {
         ClickInMine,
+        ClickInHouse,
+        ClickInMap,
         CollisionMine,
         FullCapasity,
         CollisionHouse,
@@ -70,18 +72,29 @@ public class Aldeano : MonoBehaviour
             gm = GameManager.instanceGameManager;
         }
         // Aca defino las relaciones de estado y le hago el new al objeto FSM
-        fsmMinero = new FSM((int)EstadosMinero.Count, (int)EventosMinero.Count, (int)EstadosMinero.Idle);
+        fsm = new FSM((int)EstadosAldeano.Count, (int)EventosAldeano.Count, (int)EstadosAldeano.Idle);
 
-        fsmMinero.SetRelations((int)EstadosMinero.Idle, (int)EstadosMinero.IrAMinar, (int)EventosMinero.ClickInMine);
-        fsmMinero.SetRelations((int)EstadosMinero.IrAMinar, (int)EstadosMinero.Minando, (int)EventosMinero.CollisionMine);
-        fsmMinero.SetRelations((int)EstadosMinero.IrAMinar, (int)EstadosMinero.CancelarAccion, (int)EventosMinero.Stop);
-        fsmMinero.SetRelations((int)EstadosMinero.Minando, (int)EstadosMinero.LLevarOro, (int)EventosMinero.FullCapasity);
-        fsmMinero.SetRelations((int)EstadosMinero.Minando, (int)EstadosMinero.CancelarAccion, (int)EventosMinero.Stop);
-        fsmMinero.SetRelations((int)EstadosMinero.LLevarOro, (int)EstadosMinero.DepositarOro, (int)EventosMinero.CollisionHouse);
-        fsmMinero.SetRelations((int)EstadosMinero.LLevarOro, (int)EstadosMinero.CancelarAccion, (int)EventosMinero.Stop);
-        fsmMinero.SetRelations((int)EstadosMinero.DepositarOro, (int)EstadosMinero.Idle, (int)EventosMinero.Stop);
-        fsmMinero.SetRelations((int)EstadosMinero.DepositarOro, (int)EstadosMinero.IrAMinar, (int)EventosMinero.ClickInMine);
-        fsmMinero.SetRelations((int)EstadosMinero.CancelarAccion, (int)EstadosMinero.Idle, (int)EventosMinero.Stop);
+        //minero
+        fsm.SetRelations((int)EstadosAldeano.Idle, (int)EstadosAldeano.IrAMinar, (int)EventosAldeano.ClickInMine);
+        fsm.SetRelations((int)EstadosAldeano.IrAMinar, (int)EstadosAldeano.Minando, (int)EventosAldeano.CollisionMine);
+        fsm.SetRelations((int)EstadosAldeano.IrAMinar, (int)EstadosAldeano.CancelarAccion, (int)EventosAldeano.Stop);
+        fsm.SetRelations((int)EstadosAldeano.Minando, (int)EstadosAldeano.LLevarOro, (int)EventosAldeano.FullCapasity);
+        fsm.SetRelations((int)EstadosAldeano.Minando, (int)EstadosAldeano.CancelarAccion, (int)EventosAldeano.Stop);
+        fsm.SetRelations((int)EstadosAldeano.LLevarOro, (int)EstadosAldeano.DepositarOro, (int)EventosAldeano.CollisionHouse);
+        fsm.SetRelations((int)EstadosAldeano.LLevarOro, (int)EstadosAldeano.CancelarAccion, (int)EventosAldeano.Stop);
+        fsm.SetRelations((int)EstadosAldeano.DepositarOro, (int)EstadosAldeano.Idle, (int)EventosAldeano.Stop);
+        fsm.SetRelations((int)EstadosAldeano.DepositarOro, (int)EstadosAldeano.IrAMinar, (int)EventosAldeano.ClickInMine);
+        fsm.SetRelations((int)EstadosAldeano.CancelarAccion, (int)EstadosAldeano.Idle, (int)EventosAldeano.Stop);
+
+        fsm.SetRelations((int)EstadosAldeano.Idle, (int)EstadosAldeano.LLevarOro, (int)EventosAldeano.ClickInHouse);
+        fsm.SetRelations((int)EstadosAldeano.IrAMinar, (int)EstadosAldeano.LLevarOro, (int)EventosAldeano.ClickInHouse);
+        fsm.SetRelations((int)EstadosAldeano.Minando, (int)EstadosAldeano.LLevarOro, (int)EventosAldeano.ClickInHouse);
+
+        //movimiento
+        fsm.SetRelations((int)EstadosAldeano.Idle, (int)EstadosAldeano.MoverAldeano, (int)EventosAldeano.ClickInMap);
+        fsm.SetRelations((int)EstadosAldeano.IrAMinar, (int)EstadosAldeano.MoverAldeano, (int)EventosAldeano.ClickInMap);
+        fsm.SetRelations((int)EstadosAldeano.Minando, (int)EstadosAldeano.MoverAldeano, (int)EventosAldeano.ClickInMap);
+        fsm.SetRelations((int)EstadosAldeano.MoverAldeano, (int)EstadosAldeano.Idle, (int)EventosAldeano.Stop);
     }
 
     private void Start()
@@ -107,24 +120,24 @@ public class Aldeano : MonoBehaviour
         }
         //HAGO EL SWITCH DE LA MAQUINA DE ESTADOS
         //Debug.Log((EstadosMinero)fsmMinero.GetCurrentState() + ": " + numeroMinero);
-        switch (fsmMinero.GetCurrentState())
+        switch (fsm.GetCurrentState())
         {
-            case (int)EstadosMinero.Idle:
-                IdleMinero();
+            case (int)EstadosAldeano.Idle:
+                Idle();
                 break;
-            case (int)EstadosMinero.IrAMinar:
+            case (int)EstadosAldeano.IrAMinar:
                 IrAMinar();
                 break;
-            case (int)EstadosMinero.Minando:
+            case (int)EstadosAldeano.Minando:
                 Minar();
                 break;
-            case (int)EstadosMinero.LLevarOro:
+            case (int)EstadosAldeano.LLevarOro:
                 LLevarOro();
                 break;
-            case (int)EstadosMinero.DepositarOro:
+            case (int)EstadosAldeano.DepositarOro:
                 DepositarOro();
                 break;
-            case (int)EstadosMinero.CancelarAccion:
+            case (int)EstadosAldeano.CancelarAccion:
                 CancelarAccion();
                 break;
         }
@@ -147,18 +160,20 @@ public class Aldeano : MonoBehaviour
         posicionActual = _posicionActual;
     }
     //HAGO LAS FUNCIONES QUE VA A LLAMAR EL SWITCH DE LA MAQUINA DE ESTADOS UBICADA EN EL Update()
-    public void IdleMinero()
+    public void Idle()
     {
-        //Animacion del minero con un cacho de oro en caso de tenerlo
-        //sino tiene oro en sima se ejecuta la animacion "Idle" del aldeano en si
-        if (trabajo == "Minar")
+        switch (trabajo)
         {
-            fsmMinero.SendEvent((int)EventosMinero.ClickInMine);
-            i = 0;
-        }
-        else
-        {
-            //CORRER ANIMACION IDLE
+            case "Minar":
+                fsm.SendEvent((int)EventosAldeano.ClickInMine);
+                i = 0;
+                break;
+            case "Llevar Oro":
+                fsm.SendEvent((int)EventosAldeano.ClickInHouse);
+                break;
+            case "Mover Aldeano":
+                fsm.SendEvent((int)EventosAldeano.ClickInMap);
+                break;
         }
     }
     public void IrAMinar()
@@ -201,11 +216,15 @@ public class Aldeano : MonoBehaviour
                 else
                 {
                     FinishPath();
-                    fsmMinero.SendEvent((int)EventosMinero.Stop);
+                    fsm.SendEvent((int)EventosAldeano.Stop);
                     trabajo = " ";
                 }
             }
 
+        if (trabajo == "Llevar Oro")
+        {
+            fsm.SendEvent((int)EventosAldeano.ClickInHouse);
+        }
         //}
     }
     public void Minar()
@@ -221,11 +240,15 @@ public class Aldeano : MonoBehaviour
         if (cantOro >= capacity)
         {
             //Debug.Log("FULL CAPASITY");
-            fsmMinero.SendEvent((int)EventosMinero.FullCapasity);
+            fsm.SendEvent((int)EventosAldeano.FullCapasity);
         }
         if (!objetivoTrabajo.gameObject.activeSelf)
         {
-            fsmMinero.SendEvent((int)EventosMinero.FullCapasity);
+            fsm.SendEvent((int)EventosAldeano.FullCapasity);
+        }
+        if (trabajo == "Llevar Oro")
+        {
+            fsm.SendEvent((int)EventosAldeano.ClickInHouse);
         }
     }
     public void LLevarOro()
@@ -283,14 +306,20 @@ public class Aldeano : MonoBehaviour
         cantOro = 0;
         if (objetivoTrabajo.activeSelf)
         {
-            fsmMinero.SendEvent((int)EventosMinero.ClickInMine);
+            fsm.SendEvent((int)EventosAldeano.ClickInMine);
             //Debug.Log("VOLVI AL CLICK IN MINE");
         }
         else
         {
-            fsmMinero.SendEvent((int)EventosMinero.Stop);
+            fsm.SendEvent((int)EventosAldeano.Stop);
             trabajo = " ";
             //Debug.Log("TOMATE UN DESCANSO PERRO");
+        }
+
+        if (trabajo == "Llevar Oro")
+        {
+            fsm.SendEvent((int)EventosAldeano.Stop);
+            trabajo = " ";
         }
     }
     public void FinishPath()
@@ -360,7 +389,7 @@ public class Aldeano : MonoBehaviour
         FinishPath();
         trabajo = "";
         objetivoTrabajo = null;
-        fsmMinero.SendEvent((int)EventosMinero.Stop);
+        fsm.SendEvent((int)EventosAldeano.Stop);
     }
     public void BuscarAlmacenMasCercano()
     {
@@ -387,28 +416,28 @@ public class Aldeano : MonoBehaviour
         //Debug.Log("TRIGGEREO CON " + other.gameObject.tag);
         if (other.gameObject == objetivoTrabajo && trabajo == "Minar" && other.gameObject.tag == "Mineral" && cantOro < capacity)
         {
-            fsmMinero.SendEvent((int)EventosMinero.CollisionMine);
+            fsm.SendEvent((int)EventosAldeano.CollisionMine);
             other.gameObject.GetComponent<Recurso>().CantidadDeRecurso = other.gameObject.GetComponent<Recurso>().CantidadDeRecurso - Time.deltaTime;
             path.Clear();
         }
 
         if (cantOro >= capacity)
         {
-            fsmMinero.SendEvent((int)EventosMinero.FullCapasity);
+            fsm.SendEvent((int)EventosAldeano.FullCapasity);
         }
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (trabajo == "Minar" && other.gameObject.tag == "Centro Urbano" && cantOro > 0)
+        if ((trabajo == "Minar" || trabajo == "Llevar Oro") && other.gameObject.tag == "Centro Urbano" && cantOro > 0)
         {
-            fsmMinero.SendEvent((int)EventosMinero.CollisionHouse);
+            fsm.SendEvent((int)EventosAldeano.CollisionHouse);
         }
     }
     private void OnTriggerExit(Collider other)
     {
-        if (trabajo == "Minar" && other.gameObject.tag == "Mineral")
+        if ((trabajo == "Minar" || trabajo == "Llevar Oro") && other.gameObject.tag == "Mineral")
         {
-            fsmMinero.SendEvent((int)EventosMinero.FullCapasity);
+            fsm.SendEvent((int)EventosAldeano.FullCapasity);
         }
     }
     private void OnDrawGizmos()
@@ -423,4 +452,22 @@ public class Aldeano : MonoBehaviour
             Gizmos.DrawCube(n.transform.position, n.transform.localScale * 2.5f);
         }
     }
+    //[SerializeField] private float cantOro;
+    //[SerializeField] private float cantPiedra;
+    //[SerializeField] private float cantAlimento;
+    //[SerializeField] private float cantMadera;
+    #region SetersAndGetters
+    public void SetOro(float _cantOro) => cantOro = _cantOro;
+    public float GetOro() { return cantOro; }
+
+    public void SetPiedra(float _cantPiedra) => cantPiedra = _cantPiedra;
+    public float GetPiedra() { return cantPiedra; }
+
+    public void SetAlimento(float _cantAlimento) => cantAlimento = _cantAlimento;
+    public float GetAlimento() { return cantAlimento; }
+
+    public void SetMadera(float _cantMadera) => cantMadera = _cantMadera;
+    public float GetMadera() { return cantMadera; }
+    #endregion
+
 }

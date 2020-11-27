@@ -24,6 +24,15 @@ public class ObjectClicked : MonoBehaviour
         if (seleccion1 != null && Input.GetKeyDown(KeyCode.Mouse1))
         {
             seleccion2 = CheckHitMouse();
+            if (seleccion1 != null && seleccion1.tag == "Aldeano" && seleccion2 != null && seleccion2.tag == "Piso")
+            {
+                RaycastHit hit;
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out hit, range))
+                {
+                    seleccion2.transform.position = hit.point;
+                }
+            }
         }
 
         if (seleccion1 != null && seleccion2 != null)
@@ -32,6 +41,30 @@ public class ObjectClicked : MonoBehaviour
             {
                 seleccion1.GetComponent<Aldeano>().SetObjetivoTrabajo(seleccion2);
                 seleccion1.GetComponent<Aldeano>().trabajo = "Minar";
+                seleccion1 = null;
+                seleccion2 = null;
+            }
+            else if (seleccion1.tag == "Aldeano" && (seleccion2.tag == "Centro Urbano" || seleccion2.tag == "Deposito Minero"))
+            {
+                Aldeano aldeano = seleccion1.GetComponent<Aldeano>();
+                if (aldeano != null && aldeano.GetOro() > 0)
+                {
+                    aldeano.GetComponent<Aldeano>().SetObjetivoTrabajo(seleccion2);
+                    aldeano.GetComponent<Aldeano>().trabajo = "Llevar Oro";
+                    
+                }
+                else
+                {
+                    aldeano.GetComponent<Aldeano>().SetObjetivoTrabajo(seleccion2);
+                    aldeano.GetComponent<Aldeano>().trabajo = "Mover Aldeano";
+                }
+                seleccion1 = null;
+                seleccion2 = null;
+            }
+            else if (seleccion1.tag == "Aldeano" && seleccion2.tag == "Piso")
+            {
+                seleccion1.GetComponent<Aldeano>().SetObjetivoTrabajo(seleccion2);
+                seleccion1.GetComponent<Aldeano>().trabajo = "Mover Aldeano";
                 seleccion1 = null;
                 seleccion2 = null;
             }

@@ -905,6 +905,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5b4cf3cff029e414a9131f9739bce6d6, type: 3}
+--- !u!4 &1149109072 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2721336830659892914, guid: 5b4cf3cff029e414a9131f9739bce6d6,
+    type: 3}
+  m_PrefabInstance: {fileID: 1149109071}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1288925301 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7589003963281389333, guid: 3cef6bae00a5b1c45b665c5111520581,
@@ -1383,6 +1389,16 @@ PrefabInstance:
     - target: {fileID: 6158787338436406696, guid: c8a1962c7d8bdca4ab79d116c0aa900c,
         type: 3}
       propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6158787338436406696, guid: c8a1962c7d8bdca4ab79d116c0aa900c,
+        type: 3}
+      propertyPath: cameraPivot
+      value: 
+      objectReference: {fileID: 1149109072}
+    - target: {fileID: 6158787338436406696, guid: c8a1962c7d8bdca4ab79d116c0aa900c,
+        type: 3}
+      propertyPath: speedHorizontalMovement
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6158787338436406695, guid: c8a1962c7d8bdca4ab79d116c0aa900c,

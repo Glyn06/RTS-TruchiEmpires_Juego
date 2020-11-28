@@ -1,6 +1,6 @@
 TEMAS:
--FSM
--Pathfinding
+-FSM (HECHO)
+-Pathfinding (HECHO)
 -Flocking
 -Beahviour Trees
 -Redes neuronales

@@ -6,7 +6,6 @@ public class CameraMove : MonoBehaviour
 {
     // Start is called before the first frame update
     public Transform cameraAnchor;
-    public Transform cameraPivot;
 
     private int border;
     private Vector2 screenBorder;
@@ -25,30 +24,20 @@ public class CameraMove : MonoBehaviour
     {
         //if (Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0)
         //{
-        Vector2 mouse = Input.mousePosition;
-        if ((Input.mousePosition.x < border) ||
-            (Input.mousePosition.x > screenBorder.x) ||
-            (Input.mousePosition.y < this.border) ||
-            (Input.mousePosition.y > this.screenBorder.y))
-        {
-            movement = mouse - middleScreen;
-            movement.z = movement.y;
-            movement.y = 0;
-            movement = movement.normalized / 2f;
+            Vector2 mouse = Input.mousePosition;
+            if ((Input.mousePosition.x < border) ||
+                (Input.mousePosition.x > screenBorder.x) ||
+                (Input.mousePosition.y < this.border) ||
+                (Input.mousePosition.y > this.screenBorder.y))
+            {
+                movement = mouse - middleScreen;
+                movement.z = movement.y;
+                movement.y = 0;
+                movement = movement.normalized / 2f;
 
-            cameraAnchor.Translate(movement);
-        }
-        if (cameraPivot != null)
-        {
-            if (Input.GetAxis("Mouse ScrollWheel") > 0)
-            {
-                cameraPivot.position = new Vector3(cameraPivot.transform.position.x, cameraPivot.transform.position.y + 1f, cameraPivot.transform.position.z);
+                cameraAnchor.Translate(movement);
             }
-            else if (Input.GetAxis("Mouse ScrollWheel") < 0)
-            {
-                cameraPivot.position = new Vector3(cameraPivot.transform.position.x, cameraPivot.transform.position.y - 1f, cameraPivot.transform.position.z);
-            }
-        }
+
 
         //}
     }

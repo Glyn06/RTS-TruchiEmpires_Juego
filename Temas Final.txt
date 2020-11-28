@@ -1,7 +1,7 @@
 TEMAS:
 -FSM (HECHO)
 -Pathfinding (HECHO)
--Flocking
+-Flocking(HECHO)
 -Beahviour Trees
 -Redes neuronales
 -Adgoritmo Genetico

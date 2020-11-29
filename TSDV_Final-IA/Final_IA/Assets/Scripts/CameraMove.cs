@@ -14,6 +14,8 @@ public class CameraMove : MonoBehaviour
 
     private Vector3 movement;
 
+    [SerializeField] private bool useInputKey = false;
+
     [SerializeField]private float speedHorizontalMovement = 2.0f;
     [SerializeField]private float speedVerticalMovment = 2.0f;
 
@@ -48,6 +50,28 @@ public class CameraMove : MonoBehaviour
         else if (Input.GetAxis("Mouse ScrollWheel") < 0)
         {
             cameraPivot.transform.position = new Vector3(cameraPivot.transform.position.x, cameraPivot.transform.position.y + speedVerticalMovment, cameraPivot.transform.position.z);
+        }
+        if (useInputKey)
+        {
+            if (Input.GetKey(KeyCode.W))
+            {
+                cameraAnchor.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + speedHorizontalMovement);
+            }
+
+            if (Input.GetKey(KeyCode.S))
+            {
+                cameraAnchor.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - speedHorizontalMovement);
+            }
+
+            if (Input.GetKey(KeyCode.D))
+            {
+                cameraAnchor.transform.position = new Vector3(transform.position.x + speedHorizontalMovement, transform.position.y, transform.position.z);
+            }
+
+            if (Input.GetKey(KeyCode.A))
+            {
+                cameraAnchor.transform.position = new Vector3(transform.position.x - speedHorizontalMovement, transform.position.y, transform.position.z);
+            }
         }
     }
 }

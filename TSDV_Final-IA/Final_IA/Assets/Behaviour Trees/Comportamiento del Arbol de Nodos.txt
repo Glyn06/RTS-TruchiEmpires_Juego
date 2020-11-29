@@ -1,0 +1,6 @@
+-Enemigo se queda quieto.
+-Si el player esta en rango de persecucion lo persigue.
+-Si el player esta en rango de Ataque le dispara.
+-Si el enemigo tiene una vida baja huye y busca covertura mientras se cura.
+-Si sale del rango de ataque pasa a perseguirlo.
+-Si sale del rango de persecucion pasa a estar quieto de nuevo.

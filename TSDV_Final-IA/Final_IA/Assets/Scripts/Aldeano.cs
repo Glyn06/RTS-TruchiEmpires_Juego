@@ -509,7 +509,7 @@ public class Aldeano : GameElement
         if (other.tag == "Agua")
         {
             speed = waterSpeed;
-            Debug.Log("WATER SPEED");
+            //Debug.Log("WATER SPEED");
         }
     }
     private void OnTriggerEnter(Collider other)

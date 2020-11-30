@@ -18,6 +18,8 @@ namespace BehaviourTree
         [SerializeField] private GameObject spawnBullet;
         [SerializeField] private float damageBullet;
 
+        [SerializeField] Transform target;
+
         void Awake()
         {
             health = startingHealth;
@@ -32,6 +34,7 @@ namespace BehaviourTree
         void Update()
         {
             Movement();
+            Rotation();
             rig.velocity = Vector3.zero;
             rig.angularVelocity = Vector3.zero;
             if (health < startingHealth)
@@ -42,6 +45,20 @@ namespace BehaviourTree
             {
                 ShootBullet();
             }
+        }
+        private void Rotation()
+        {
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Vector3 point = Vector3.zero;
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+            {
+                point = hit.point;
+            }
+
+            Vector3 relative = transform.InverseTransformPoint(point);
+            float angle = Mathf.Atan2(relative.x, relative.z) * Mathf.Rad2Deg;
+            transform.Rotate(0, angle, 0);
         }
         private void Movement()
         {

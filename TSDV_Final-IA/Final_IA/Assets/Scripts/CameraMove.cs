@@ -15,6 +15,8 @@ public class CameraMove : MonoBehaviour
     private Vector3 movement;
 
     [SerializeField] private bool useInputKey = false;
+    [SerializeField] private bool followTrasform = false;
+    [SerializeField] private Transform transformFollow;
 
     [SerializeField]private float speedHorizontalMovement = 2.0f;
     [SerializeField]private float speedVerticalMovment = 2.0f;
@@ -29,27 +31,34 @@ public class CameraMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 mouse = Input.mousePosition;
-        if ((Input.mousePosition.x < border) ||
-            (Input.mousePosition.x > screenBorder.x) ||
-            (Input.mousePosition.y < this.border) ||
-            (Input.mousePosition.y > this.screenBorder.y))
+        if (!followTrasform)
         {
-            movement = mouse - middleScreen;
-            movement.z = movement.y;
-            movement.y = 0;
-            movement = movement.normalized / 2f;
+            Vector2 mouse = Input.mousePosition;
+            if ((Input.mousePosition.x < border) ||
+                (Input.mousePosition.x > screenBorder.x) ||
+                (Input.mousePosition.y < this.border) ||
+                (Input.mousePosition.y > this.screenBorder.y))
+            {
+                movement = mouse - middleScreen;
+                movement.z = movement.y;
+                movement.y = 0;
+                movement = movement.normalized / 2f;
 
-            cameraAnchor.Translate(movement * speedHorizontalMovement);
-        }
+                cameraAnchor.Translate(movement * speedHorizontalMovement);
+            }
 
-        if (Input.GetAxis("Mouse ScrollWheel") > 0)
-        {
-            cameraPivot.transform.position = new Vector3(cameraPivot.transform.position.x, cameraPivot.transform.position.y - speedVerticalMovment, cameraPivot.transform.position.z);
+            if (Input.GetAxis("Mouse ScrollWheel") > 0)
+            {
+                cameraPivot.transform.position = new Vector3(cameraPivot.transform.position.x, cameraPivot.transform.position.y - speedVerticalMovment, cameraPivot.transform.position.z);
+            }
+            else if (Input.GetAxis("Mouse ScrollWheel") < 0)
+            {
+                cameraPivot.transform.position = new Vector3(cameraPivot.transform.position.x, cameraPivot.transform.position.y + speedVerticalMovment, cameraPivot.transform.position.z);
+            }
         }
-        else if (Input.GetAxis("Mouse ScrollWheel") < 0)
+        else if (followTrasform)
         {
-            cameraPivot.transform.position = new Vector3(cameraPivot.transform.position.x, cameraPivot.transform.position.y + speedVerticalMovment, cameraPivot.transform.position.z);
+            cameraAnchor.transform.position = new Vector3(transformFollow.position.x, transform.position.y, transformFollow.position.z );
         }
         if (useInputKey)
         {

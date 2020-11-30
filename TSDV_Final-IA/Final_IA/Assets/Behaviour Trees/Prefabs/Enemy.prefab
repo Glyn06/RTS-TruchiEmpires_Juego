@@ -130,7 +130,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startingHealth: 100
   lowHealthThreshold: 50
-  healthRestoreRate: 1
+  healthRestoreRate: 5
   chasingRange: 30
   shootingRange: 15
   playerTransform: {fileID: 0}

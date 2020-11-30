@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 namespace BehaviourTree
 {
     public class Player : MonoBehaviour
@@ -72,7 +72,7 @@ namespace BehaviourTree
         {
             if (health <= 0)
             {
-                Destroy(gameObject);
+                SceneManager.LoadScene("GameOver");
             }
         }
 

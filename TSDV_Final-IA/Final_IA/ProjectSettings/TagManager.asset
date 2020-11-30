@@ -15,6 +15,7 @@ TagManager:
   - Destruible
   - Agua
   - Wall
+  - Enemy
   layers:
   - Default
   - TransparentFX

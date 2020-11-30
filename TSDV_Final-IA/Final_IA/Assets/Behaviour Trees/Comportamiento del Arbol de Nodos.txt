@@ -4,3 +4,10 @@
 -Si el enemigo tiene una vida baja huye y busca covertura mientras se cura.
 -Si sale del rango de ataque pasa a perseguirlo.
 -Si sale del rango de persecucion pasa a estar quieto de nuevo.
+
+
+Para detectar en que estado esta el enemigo
+
+-Rojo: Fuera de rango de persecucion.
+-Amarillo: Perseguir al jugador.
+-Verde: Disparar al jugador.

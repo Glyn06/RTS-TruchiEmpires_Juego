@@ -14,11 +14,8 @@ namespace BehaviourTree
         [SerializeField] private float chasingRange;
         [SerializeField] private float shootingRange;
 
-
         [SerializeField] private Transform playerTransform;
         [SerializeField] private Cover[] avaliableCovers;
-
-
 
         private Material material;
         private Transform bestCoverSpot;
@@ -33,6 +30,14 @@ namespace BehaviourTree
             set { _currentHealth = Mathf.Clamp(value, 0, startingHealth); }
         }
 
+        [Header("Shooting Settings")]
+        public float delayShoot;
+        [HideInInspector] public float auxDelayShoot;
+        [SerializeField] private Bullet bulletObject;
+        [SerializeField] private GameObject spawnBullet;
+        [SerializeField] private float damageBullet;
+        
+
         private void Awake()
         {
             agent = GetComponent<NavMeshAgent>();
@@ -41,6 +46,7 @@ namespace BehaviourTree
 
         private void Start()
         {
+            auxDelayShoot = delayShoot;
             GameObject[] coversGO = GameObject.FindGameObjectsWithTag("Wall");
             avaliableCovers = new Cover[coversGO.Length];
             for (int i = 0; i < coversGO.Length; i++)
@@ -78,19 +84,21 @@ namespace BehaviourTree
 
         private void Update()
         {
-            topNode.Evaluate();
-            if (topNode.nodeState == NodeState.FAILURE)
-            {
-                SetColor(Color.red);
-                agent.isStopped = true;
-            }
-            if (_currentHealth < startingHealth)
-            {
-                _currentHealth += Time.deltaTime * healthRestoreRate;
-            }
-            else if (_currentHealth >= startingHealth)
-            {
-                _currentHealth = startingHealth;
+            if (playerTransform != null) {
+                topNode.Evaluate();
+                if (topNode.nodeState == NodeState.FAILURE)
+                {
+                    SetColor(Color.red);
+                    agent.isStopped = true;
+                }
+                if (_currentHealth < startingHealth)
+                {
+                    _currentHealth += Time.deltaTime * healthRestoreRate;
+                }
+                else if (_currentHealth >= startingHealth)
+                {
+                    _currentHealth = startingHealth;
+                }
             }
         }
 
@@ -114,7 +122,18 @@ namespace BehaviourTree
         {
             return bestCoverSpot;
         }
-
-
+        public void CheckDie()
+        {
+            if (_currentHealth <= 0)
+            {
+                Destroy(gameObject);
+            }
+        }
+        public void ShootBullet()
+        {
+            Bullet _bullet = Instantiate(bulletObject, spawnBullet.transform.position, spawnBullet.transform.rotation);
+            _bullet.SetShooter(Bullet.Shooter.Enemy);
+            _bullet.SetDamage(damageBullet);
+        }
     }
 }

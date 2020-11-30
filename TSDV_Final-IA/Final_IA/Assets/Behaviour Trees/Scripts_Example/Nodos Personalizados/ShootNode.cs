@@ -29,6 +29,15 @@ namespace BehaviourTree
             Vector3 currentDirection = Vector3.SmoothDamp(ai.transform.forward, direction, ref currentVelocity, smoothDamp);
             Quaternion rotation = Quaternion.LookRotation(currentDirection, Vector3.up);
             ai.transform.rotation = rotation;
+            if (ai.delayShoot > 0)
+            {
+                ai.delayShoot -= Time.deltaTime;
+            }
+            else if (ai.delayShoot <= 0)
+            {
+                ai.delayShoot = ai.auxDelayShoot;
+                ai.ShootBullet();
+            }
             return NodeState.RUNNING;
         }
 

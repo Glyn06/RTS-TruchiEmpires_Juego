@@ -239,6 +239,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraAnchor: {fileID: 569509138}
   cameraPivot: {fileID: 569509137}
+  useInputKey: 1
+  followTrasform: 0
+  transformFollow: {fileID: 0}
   speedHorizontalMovement: 2
   speedVerticalMovment: 2
 --- !u!4 &759282973
@@ -270,12 +273,12 @@ PrefabInstance:
     - target: {fileID: 1890576386993037463, guid: 237e4c106bb4b494e9c874a17fa6496b,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -131.7
+      value: -36
       objectReference: {fileID: 0}
     - target: {fileID: 1890576386993037463, guid: 237e4c106bb4b494e9c874a17fa6496b,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 26.85
+      value: 17.1
       objectReference: {fileID: 0}
     - target: {fileID: 1890576386993037463, guid: 237e4c106bb4b494e9c874a17fa6496b,
         type: 3}

@@ -64,22 +64,22 @@ public class CameraMove : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.W))
             {
-                cameraAnchor.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + speedHorizontalMovement);
+                cameraAnchor.transform.position = new Vector3(cameraAnchor.transform.position.x, cameraAnchor.transform.position.y, cameraAnchor.transform.position.z + speedHorizontalMovement);
             }
 
             if (Input.GetKey(KeyCode.S))
             {
-                cameraAnchor.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - speedHorizontalMovement);
+                cameraAnchor.transform.position = new Vector3(cameraAnchor.transform.position.x, cameraAnchor.transform.position.y, cameraAnchor.transform.position.z - speedHorizontalMovement);
             }
 
             if (Input.GetKey(KeyCode.D))
             {
-                cameraAnchor.transform.position = new Vector3(transform.position.x + speedHorizontalMovement, transform.position.y, transform.position.z);
+                cameraAnchor.transform.position = new Vector3(cameraAnchor.transform.position.x + speedHorizontalMovement, cameraAnchor.transform.position.y, cameraAnchor.transform.position.z);
             }
 
             if (Input.GetKey(KeyCode.A))
             {
-                cameraAnchor.transform.position = new Vector3(transform.position.x - speedHorizontalMovement, transform.position.y, transform.position.z);
+                cameraAnchor.transform.position = new Vector3(cameraAnchor.transform.position.x - speedHorizontalMovement, cameraAnchor.transform.position.y, cameraAnchor.transform.position.z);
             }
         }
     }
